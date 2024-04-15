@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbpInsight", "AbpInsight\AbpInsight.csproj", "{BEDF7A48-7A51-4F6D-8DF6-B7A2AFE278D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbpInsight.Rider", "AbpInsight\AbpInsight.Rider.csproj", "{AAE827E1-B9CE-476B-8DF4-64CDD44F6965}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbpInsight.Tests", "AbpInsight.Tests\AbpInsight.Tests.csproj", "{1642DE6A-2728-4714-B641-60C973844053}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{AEE9168E-CA22-4106-9B06-7284E8400CCE}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Plugin.props = Plugin.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEDF7A48-7A51-4F6D-8DF6-B7A2AFE278D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDF7A48-7A51-4F6D-8DF6-B7A2AFE278D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDF7A48-7A51-4F6D-8DF6-B7A2AFE278D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDF7A48-7A51-4F6D-8DF6-B7A2AFE278D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE827E1-B9CE-476B-8DF4-64CDD44F6965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE827E1-B9CE-476B-8DF4-64CDD44F6965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE827E1-B9CE-476B-8DF4-64CDD44F6965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE827E1-B9CE-476B-8DF4-64CDD44F6965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1642DE6A-2728-4714-B641-60C973844053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1642DE6A-2728-4714-B641-60C973844053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1642DE6A-2728-4714-B641-60C973844053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1642DE6A-2728-4714-B641-60C973844053}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

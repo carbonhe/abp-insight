@@ -1,0 +1,21 @@
+<idea-plugin require-restart="true">
+    <id>carbon.abpInsight</id>
+    <name>Abp Insight</name>
+    <version>2024.1.0.9999</version>
+    <vendor>Carbon</vendor>
+    <idea-version since-build="2023.1"/>
+    <depends>com.intellij.modules.rider</depends>
+
+    <description><![CDATA[
+<p>Adds navigation, auto-completion and inspections specific to the <a href="https://abp.io/">Abp Framework</a>.</p>
+<p>
+<strong>Features</strong>
+<ul>
+  <li>Analyze Abp module dependencies and potential problems.</li>
+  <li>And much more!</li>
+</ul>
+</p>
+]]>
+    </description>
+
+</idea-plugin>

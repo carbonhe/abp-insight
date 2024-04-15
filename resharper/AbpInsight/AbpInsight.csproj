@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <IsPackable>True</IsPackable>
+        <DefineConstants>$(DefineConstants);RESHARPER</DefineConstants>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JetBrains.ReSharper.SDK" Version="$(SdkVersion)" PrivateAssets="all"/>
+        <PackageReference Include="Wave" Version="$(WaveVersion)"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\..\..\dependencies.json" PackagePath="" Pack="true" Visible="false"/>
+        <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).dll" PackagePath="dotFiles" Pack="true" Visible="false"/>
+        <Content Include="bin\$(AssemblyName)\$(Configuration)\$(AssemblyName).pdb" PackagePath="dotFiles" Pack="true" Visible="false"/>
+
+        <!-- TODO: add additional assemblies -->
+    </ItemGroup>
+
+    <ItemGroup>
+        <ErrorsGen Include="Daemon\Errors\CSharpErrors.xml">
+            <Namespace>AbpInsight.Daemon.Errors</Namespace>
+            <OutputFile>Daemon\Errors\CSharpErrors.generated.cs</OutputFile>
+            <Mode>ERRORS</Mode>
+        </ErrorsGen>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <AssemblyName>AbpInsight.Rider</AssemblyName>
+        <RootNamespace>AbpInsight</RootNamespace>
+        <IsPackable>false</IsPackable>
+        <DefineConstants>$(DefineConstants);RIDER</DefineConstants>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Rider.SDK" Version="$(SdkVersion)"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ErrorsGen Include="Daemon\Errors\CSharpErrors.xml">
+            <Namespace>AbpInsight.Daemon.Errors</Namespace>
+            <OutputFile>Daemon\Errors\CSharpErrors.generated.cs</OutputFile>
+            <Mode>ERRORS</Mode>
+        </ErrorsGen>
+    </ItemGroup>
+</Project>

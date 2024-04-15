@@ -1,0 +1,7 @@
+<assembly name="Volo.Abp.Core">
+    <member name="T:Volo.Abp.Modularity.DependsOnAttribute">
+        <attribute ctor="M:JetBrains.Annotations.BaseTypeRequiredAttribute.#ctor(System.Type)">
+            <argument>Volo.Abp.Modularity.IAbpModule</argument>
+        </attribute>
+    </member>
+</assembly>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Errors language="C#" configurableSeverityImplementationLanguage="CSHARP"
+        baseClass="CSharpAbpHighlightingBase, IAbpAnalyzerHighlighting">
+
+    <Usings>
+        JetBrains.ReSharper.Psi.CSharp;
+        JetBrains.ReSharper.Psi.CSharp.Tree;
+        AbpInsight.Daemon.Stages.Highlightings;
+        Strings = AbpInsight.Resources.Strings;
+    </Usings>
+
+
+    <StaticSeverityGroups>
+        <Group name="Abp Errors" key="AbpErrors"/>
+        <Group name="Abp Warnings" key="AbpWarnings"/>
+        <Group name="Abp Suggestions" key="AbpSuggestions"/>
+    </StaticSeverityGroups>
+
+    <!-- Register the configurable severities
+     Can take a child Tag or Group element
+     * Tag is configurable severity without a group
+     * Group[@name] specifies the name of the group, expects child Tag elements.
+       Note that the group name/title should be registered with
+       [assembly: RegisterConfigurableHighlightingsGroup(name, "Title")]
+     * Tag[@name] is the HIGHLIGHTING_ID of a warning/error. It is treated as a string
+       literal and quoted. It is referenced in Warning[@configurableSeverity]
+     * Tag[@default] is the default severity. Just the enum value, no leading "Severity."
+     * Tag[@type] is optional. Default is "simple". Other options include "global",
+       "localAndGlobal"
+     * Tag[@externalName] is also the HIGHLIGHTING_ID, but is treated verbatim, rather
+       than as a string literal. This allows for using the fully qualified name of the
+       HIGHLIGHTING_ID
+     * Tag[@alternatives] the value of RegisterConfigurableSeverityAttribute.AlternativeIDs
+     * Tag/Title is the short title of the severity, usually matching the highlight's MESSAGE
+     * Tag/Description is a longer description, shown in the options pages
+     * Tag/CompoundItemName only used if Tag[@type] is missing or "simple". Sets the compound
+       item name
+     -->
+    <SeverityConfiguration>
+        <Group name="AbpHighlightingGroupIds.Abp">
+            <Tag externalName="IncorrectModuleNamingWarning.HIGHLIGHTING_ID" default="SUGGESTION">
+                <Title resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
+                <Description resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
+            </Tag>
+        </Group>
+    </SeverityConfiguration>
+
+    <Warning name="IncorrectModuleNaming" configurableSeverity="Abp.IncorrectModuleNaming">
+        <Parameter type="IClassDeclaration" name="classDeclaration"/>
+        <Message resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
+        <Range>ClassDeclaration.NameIdentifier.GetDocumentRange()</Range>
+        <Behavour overlapResolvePolicy="NONE"/>
+    </Warning>
+
+    <Error name="ModuleContainsParameterizedConstructor" staticGroup="AbpErrors">
+        <Parameter type="IConstructorDeclaration" name="ConstructorDeclaration"/>
+        <Message resourceName="ModuleContainsParameterizedConstructor_Message" resourceType="Strings">
+            <Argument>ConstructorDeclaration.DeclaredName</Argument>
+        </Message>
+        <Range>ConstructorDeclaration.TypeName.GetDocumentRange()</Range>
+        <Behavour overlapResolvePolicy="ERROR"/>
+    </Error>
+
+    <Error name="ModuleTypeMustBePublic" staticGroup="AbpErrors">
+        <Parameter type="IClassDeclaration" name="classDeclaration"/>
+        <Message resourceName="ModuleTypeMustBePublic_Message" resourceType="Strings"/>
+        <Range>CSharpErrorUtil.InternalRange("AccessRightsRange",ClassDeclaration)</Range>
+        <Behavour overlapResolvePolicy="ERROR"/>
+    </Error>
+    
+</Errors>
