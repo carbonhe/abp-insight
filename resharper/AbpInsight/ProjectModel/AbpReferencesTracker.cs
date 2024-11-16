@@ -2,6 +2,7 @@
 using System.Linq;
 using JetBrains;
 using JetBrains.Application.changes;
+using JetBrains.Application.Parts;
 using JetBrains.Collections;
 using JetBrains.Diagnostics;
 using JetBrains.Lifetimes;
@@ -21,7 +22,7 @@ public interface IAbpReferenceChangeHandler
     void OnAbpProjectAdded(Lifetime projectLifetime, IProject project);
 }
 
-[SolutionComponent]
+[SolutionComponent(Instantiation.DemandAnyThreadSafe)]
 public class AbpReferencesTracker : IChangeProvider
 {
     public static readonly Key<AbpReferencesTracker> AbpReferencesTrackerKey = new(nameof(AbpReferencesTrackerKey));

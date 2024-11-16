@@ -2,7 +2,7 @@
 
     <PropertyGroup>
 
-        <SdkVersion>2024.1</SdkVersion>
+        <SdkVersion>2024.3</SdkVersion>
 
         <Title>Abp Insight</Title>
         <Description>Adds navigation, auto-completion and inspections specific to the Abp Framework.</Description>

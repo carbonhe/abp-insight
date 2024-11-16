@@ -51,7 +51,7 @@ public class HighlightingProcess(
 
         File.ProcessThisAndDescendants(this, consumer);
 
-        committer(new DaemonStageResult(consumer.Highlightings));
+        committer(new DaemonStageResult(consumer.CollectHighlightings()));
     }
 
 

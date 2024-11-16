@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using JetBrains.Application.Parts;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
@@ -9,7 +10,7 @@ using JetBrains.ReSharper.Psi.Util;
 
 namespace AbpInsight.Framework.Injectable;
 
-[SolutionComponent]
+[SolutionComponent(Instantiation.DemandAnyThreadSafe)]
 public class AttributedInjectableServiceProvider : InjectableServiceProviderBase
 {
     public override IEnumerable<InjectableService> Scan(IPsiModule psiModule, IProgressIndicator pi)

@@ -1,11 +1,12 @@
-﻿using JetBrains.Collections.Viewable;
+﻿using JetBrains.Application.Parts;
+using JetBrains.Collections.Viewable;
 using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.Rd.Base;
 
 namespace AbpInsight.ProjectModel;
 
-[SolutionComponent]
+[SolutionComponent(Instantiation.DemandAnyThreadSafe)]
 public class AbpSolutionTracker : IAbpReferenceChangeHandler
 {
     private readonly ISolution _solution;

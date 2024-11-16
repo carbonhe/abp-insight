@@ -10,7 +10,7 @@ using JetBrains.ReSharper.Psi.Modules;
 
 namespace AbpInsight.Framework;
 
-[SolutionComponent(Instantiation.DemandAnyThread)]
+[SolutionComponent(Instantiation.DemandAnyThreadSafe)]
 public class AbpInsighter(IEnumerable<InjectableServiceProviderBase> injectableProviders)
 {
     public static bool IsAbpModuleType(ITypeElement? typeElement)

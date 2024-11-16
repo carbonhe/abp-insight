@@ -5,6 +5,7 @@ using AbpInsight.Framework;
 using AbpInsight.Resources;
 using AbpInsight.Utils;
 using JetBrains.Application.DataContext;
+using JetBrains.Application.Parts;
 using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.Application.UI.Controls.BulbMenu.Items;
 using JetBrains.Application.UI.Controls.GotoByName;
@@ -22,7 +23,7 @@ using JetBrains.UI.RichText;
 
 namespace AbpInsight.Daemon.CodeInsights;
 
-[SolutionComponent]
+[SolutionComponent(Instantiation.ContainerAsyncPrimaryThread)]
 public class TypeCodeInsightProvider(
     BulbMenuComponent bulbMenuComponent,
     OccurrencePopupMenu occurrencePopupMenu,
