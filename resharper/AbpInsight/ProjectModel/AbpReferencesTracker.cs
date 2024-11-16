@@ -22,7 +22,7 @@ public interface IAbpReferenceChangeHandler
     void OnAbpProjectAdded(Lifetime projectLifetime, IProject project);
 }
 
-[SolutionComponent(Instantiation.DemandAnyThreadSafe)]
+[SolutionComponent(Instantiation.ContainerAsyncPrimaryThread)]
 public class AbpReferencesTracker : IChangeProvider
 {
     public static readonly Key<AbpReferencesTracker> AbpReferencesTrackerKey = new(nameof(AbpReferencesTrackerKey));
