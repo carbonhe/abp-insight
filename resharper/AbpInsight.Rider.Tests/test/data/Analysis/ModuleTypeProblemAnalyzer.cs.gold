@@ -1,0 +1,7 @@
+﻿using Volo.Abp.Modularity;
+
+public class |Test01|(0) : AbpModule
+{
+}
+---------------------------------------------------------
+(0): ReSharper Suggestion: Abp module name should end with 'Module'
