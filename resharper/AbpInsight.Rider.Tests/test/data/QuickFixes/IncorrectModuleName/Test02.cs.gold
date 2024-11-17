@@ -1,0 +1,5 @@
+﻿using Volo.Abp.Modularity;
+
+public class Test{caret}02moduleModule : AbpModule
+{
+}

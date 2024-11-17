@@ -1,0 +1,20 @@
+﻿using Volo.Abp.Modularity;
+
+public class |Test01|(0) : AbpModule
+{
+}
+
+public class Test02Module : AbpModule
+{
+}
+
+public class |Test02module|(1) : AbpModule
+{
+}
+------------------------------------------------
+0: Abp module name should end with 'Module'
+QUICKFIXES:
+Rename to 'Test01Module'
+1: Abp module name should end with 'Module'
+QUICKFIXES:
+Rename to 'Test02moduleModule'
