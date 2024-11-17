@@ -3,5 +3,9 @@
 public class |Test01|(0) : AbpModule
 {
 }
+
+public class Test02Module : AbpModule
+{
+}
 ---------------------------------------------------------
 (0): ReSharper Suggestion: Abp module name should end with 'Module'

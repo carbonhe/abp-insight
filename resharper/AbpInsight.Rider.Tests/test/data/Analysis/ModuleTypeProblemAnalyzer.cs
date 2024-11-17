@@ -3,3 +3,7 @@
 public class Test01 : AbpModule
 {
 }
+
+public class Test02Module : AbpModule
+{
+}
