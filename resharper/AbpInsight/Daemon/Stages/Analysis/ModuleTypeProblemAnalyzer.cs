@@ -5,7 +5,7 @@ using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 
-namespace AbpInsight.Daemon.Stages.Analyzers;
+namespace AbpInsight.Daemon.Stages.Analysis;
 
 [ElementProblemAnalyzer(
     typeof(IClassDeclaration),
