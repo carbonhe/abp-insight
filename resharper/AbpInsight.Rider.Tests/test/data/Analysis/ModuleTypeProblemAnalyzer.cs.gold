@@ -2,10 +2,26 @@
 
 public class |Test01|(0) : AbpModule
 {
+    public |Test01|(1)(int a)
+    {
+        
+    }
 }
 
 public class Test02Module : AbpModule
 {
+    public Test01
+    {
+    }
 }
+
+|internal|(2) class |Test03|(3) : AbpModule
+{
+    
+}
+
 ---------------------------------------------------------
 (0): ReSharper Suggestion: Abp module name should end with 'Module'
+(1): ReSharper Underlined Error Highlighting: 'Test01' cannot contains parameterized constructor since it's an Abp module
+(2): ReSharper Underlined Error Highlighting: Abp module type must be public
+(3): ReSharper Suggestion: Abp module name should end with 'Module'

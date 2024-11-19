@@ -1,5 +1,4 @@
 ﻿using AbpInsight.Daemon.Errors;
-using AbpInsight.Daemon.Stages.Highlightings;
 using AbpInsight.Framework;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
@@ -12,7 +11,7 @@ namespace AbpInsight.Daemon.Stages.Analysis;
     HighlightingTypes =
     [
         typeof(IncorrectModuleNamingWarning),
-        typeof(AbpModuleGutterMarkHighlighting),
+        typeof(ModuleTypeMustBePublicError),
         typeof(ModuleContainsParameterizedConstructorError)
     ])]
 public class ModuleTypeProblemAnalyzer(AbpInsighter insighter) : AbpInsightProblemAnalyzer<IClassDeclaration>(insighter)
