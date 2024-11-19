@@ -1,9 +1,7 @@
 <idea-plugin require-restart="true">
-    <id>carbon.abpInsight</id>
+    <id>Carbon.AbpInsight</id>
     <name>Abp Insight</name>
-    <version>2024.3.0</version>
     <vendor>Carbon</vendor>
-    <idea-version since-build="2024.3"/>
     <depends>com.intellij.modules.rider</depends>
 
     <description><![CDATA[

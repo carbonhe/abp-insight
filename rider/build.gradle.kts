@@ -19,9 +19,7 @@ apply {
     plugin("kotlin")
 }
 
-val isWindows = System.getProperty("os.name").toLowerCase().startsWith("win")
 val productVersion = extra["productVersion"].toString()
-val buildCounter = extra["buildCounter"].toString()
 val buildConfiguration = extra["buildConfiguration"].toString()
 
 
@@ -31,7 +29,7 @@ extra["rdLibDirectory"] = rdLibDirectory
 val repoRoot = projectDir.parentFile!!
 val backendRoot = File(repoRoot, "resharper")
 
-version = "$productVersion.$buildCounter"
+version = "0.0.1"
 
 
 sourceSets {
@@ -80,15 +78,14 @@ fun getDotnetCli(): String {
     }
 
     if (dotnetCli == null) {
-        error(".NET Core CLI not found. Please add: 'dotnet' in PATH")
+        error(".NET Core CLI not found. Please add 'dotnet' to PATH")
     }
     return dotnetCli
 }
 
 tasks {
     processResources {
-        from("dependencies.json")
-        into("META-INF")
+
     }
 
     compileKotlin {
