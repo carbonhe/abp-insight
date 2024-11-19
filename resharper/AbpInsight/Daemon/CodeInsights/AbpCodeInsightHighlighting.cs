@@ -27,11 +27,11 @@ public class AbpCodeInsightHighlighting(
     ICodeInsightsProvider provider,
     IDeclaredElement elt,
     IconModel? icon,
-    Func<IDataContext, IEnumerable<BulbMenuItem>> actionFactory,
+    Func<IDataContext, IEnumerable<BulbMenuItem>> createBulbMenuItems,
     List<CodeVisionEntryExtraActionModel>? extraActions)
     : CodeInsightsHighlighting(range, displayText, tooltipText, moreText, provider, elt, icon, extraActions), IAbpIndicatorHighlighting
 {
     private new const string Id = "AbpCodeInsights";
 
-    public Func<IDataContext, IEnumerable<BulbMenuItem>> ActionFactory { get; } = actionFactory;
+    public IEnumerable<BulbMenuItem> CreateBulbMenuItems(IDataContext dataContext) => createBulbMenuItems(dataContext);
 }

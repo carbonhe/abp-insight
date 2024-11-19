@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AbpInsight.Daemon.Stages.Highlightings;
+using AbpInsight.Daemon.Stages.Highlightings.Providers;
 using AbpInsight.Framework;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 
@@ -11,4 +12,4 @@ namespace AbpInsight.Daemon.Stages.HighlightingStage;
 //     OverridenStages = [typeof(HighlightingStage)])]
 public class GlobalHighlightingStage(
     AbpInsighter abpInsighter,
-    IEnumerable<IAbpHighlightingProvider> highlightingProviders) : AbstractHighlightingStage(abpInsighter, highlightingProviders);
+    IEnumerable<IAbpDeclarationHighlightingProvider> highlightingProviders) : AbstractHighlightingStage(abpInsighter, highlightingProviders);

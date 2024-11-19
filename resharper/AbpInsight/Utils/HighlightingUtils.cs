@@ -7,7 +7,7 @@ namespace AbpInsight.Utils;
 
 public static class HighlightingUtils
 {
-    public static void AddImplicitUsedHighlighting(this IHighlightingConsumer consumer, ICSharpDeclaration declaration)
+    public static void AddImplicitConfigurableHighlighting(this IHighlightingConsumer consumer, ICSharpDeclaration declaration)
     {
         consumer.AddHighlighting(new AbpImplicitlyUsedIdentifierHighlighting(declaration.GetNameDocumentRange()));
     }

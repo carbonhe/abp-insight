@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AbpInsight.Daemon.Stages.Highlightings;
+using AbpInsight.Daemon.Stages.Highlightings.Providers;
 using AbpInsight.Framework;
 using AbpInsight.ProjectModel;
 using JetBrains.Application.Settings;
@@ -17,7 +18,7 @@ namespace AbpInsight.Daemon.Stages.HighlightingStage;
 
 public abstract class AbstractHighlightingStage(
     AbpInsighter abpInsighter,
-    IEnumerable<IAbpHighlightingProvider> highlightingProviders) : CSharpDaemonStageBase
+    IEnumerable<IAbpDeclarationHighlightingProvider> highlightingProviders) : CSharpDaemonStageBase
 {
     protected override IDaemonStageProcess? CreateProcess(
         IDaemonProcess process,
@@ -40,7 +41,7 @@ public class HighlightingProcess(
     IDaemonProcess process,
     ICSharpFile file,
     AbpInsighter insighter,
-    IEnumerable<IAbpHighlightingProvider> highlightingProviders,
+    IEnumerable<IAbpDeclarationHighlightingProvider> highlightingProviders,
     DaemonProcessKind processKind) : CSharpDaemonStageProcessBase(process, file)
 {
     private readonly ISet<IDeclaredElement> _markedDeclarations = new HashSet<IDeclaredElement>();
@@ -62,7 +63,7 @@ public class HighlightingProcess(
 
         foreach (var provider in highlightingProviders)
         {
-            if (provider.AddHighlighting(declaration, consumer))
+            if (provider.AddDeclarationHighlighting(declaration, consumer))
             {
                 _markedDeclarations.Add(declaration.DeclaredElement.NotNull());
             }

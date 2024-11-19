@@ -42,4 +42,4 @@ public abstract class AbpGutterMarkType(IconId iconId) : IconGutterMarkType(icon
     }
 }
 
-public class AbpModuleGutterMarkType() : AbpGutterMarkType(AbpIcons.AbpModule);
+public class AbpModuleGutterMarkType() : AbpGutterMarkType(AbpInsightIcons.AbpModule);

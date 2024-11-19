@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Application.DataContext;
 using JetBrains.Application.Progress;
+using JetBrains.Application.UI.Tooltips;
+using JetBrains.Lifetimes;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Navigation.Descriptors;
 using JetBrains.ReSharper.Feature.Services.Navigation.Requests;
 using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Feature.Services.Tree;
 using JetBrains.ReSharper.Feature.Services.Tree.SectionsManagement;
+using JetBrains.ReSharper.Resources.Shell;
 
 namespace AbpInsight.Utils;
 
@@ -33,6 +37,34 @@ public class InlineSearchRequest(
     public override ICollection<IOccurrence> Search(IProgressIndicator progressIndicator) => search(progressIndicator);
 
     public SearchDescriptor CreateSearchDescriptor(ICollection<IOccurrence>? occurrences = null) => new InlineSearchDescriptor(this, occurrences);
+
+    public void ShowOccurrences(IDataContext context, string emptyTooltip)
+    {
+        var tooltipManager = Shell.Instance.GetComponent<ITooltipManager>();
+
+        Lifetime.Using(lifetime =>
+        {
+            var occurrences = Search();
+
+            var occurrencePopupMenu = context.GetComponent<OccurrencePopupMenu>();
+
+            if (occurrences is not { Count: > 0 })
+                tooltipManager.ShowIfPopupWindowContext(emptyTooltip, context);
+            else
+                occurrencePopupMenu.ShowMenuFromTextControl(
+                    context,
+                    occurrences,
+                    new OccurrencePopupMenuOptions(
+                        Title,
+                        true,
+                        new OccurrencePresentationOptions
+                        {
+                            TextDisplayStyle = TextDisplayStyle.ContainingType,
+                            LocationStyle = GlobalLocationStyle.None
+                        }, null,
+                        () => CreateSearchDescriptor(occurrences)));
+        });
+    }
 }
 
 public class InlineSearchDescriptor(SearchRequest request, ICollection<IOccurrence>? occurrences = null) : SearchDescriptor(request, occurrences)

@@ -5,34 +5,36 @@ using AbpInsight.Framework;
 using AbpInsight.Resources;
 using AbpInsight.Utils;
 using JetBrains.Application.DataContext;
-using JetBrains.Application.Parts;
 using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.Application.UI.Controls.BulbMenu.Items;
 using JetBrains.Application.UI.Controls.GotoByName;
-using JetBrains.ProjectModel;
+using JetBrains.Application.UI.Tooltips;
+using JetBrains.Lifetimes;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Impl;
 using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Resources.Icons;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.Rider.Backend.Platform.Icons;
 using JetBrains.UI.RichText;
 
 namespace AbpInsight.Daemon.CodeInsights;
 
-[SolutionComponent(Instantiation.ContainerAsyncPrimaryThread)]
+// [SolutionComponent(Instantiation.ContainerAsyncPrimaryThread)]
 public class TypeCodeInsightProvider(
     BulbMenuComponent bulbMenuComponent,
     OccurrencePopupMenu occurrencePopupMenu,
     IconHost iconHost,
-    AbpInsighter insighter) : AbstractCodeInsightProvider(bulbMenuComponent, occurrencePopupMenu)
+    AbpInsighter insighter)
 {
-    public override bool AddHighlighting(ICSharpDeclaration declaration, IHighlightingConsumer consumer)
+    public bool AddHighlighting(IDeclaration treeNode, IHighlightingConsumer consumer)
     {
-        if (declaration is not IClassLikeDeclaration element)
+        if (treeNode is not IClassLikeDeclaration element)
             return false;
 
         var typeElement = element.DeclaredElement;
@@ -40,23 +42,23 @@ public class TypeCodeInsightProvider(
         {
             if (AbpInsighter.IsAbpModuleType(typeElement))
             {
-                consumer.AddImplicitUsedHighlighting(element);
+                consumer.AddImplicitConfigurableHighlighting(element);
 
-                AddHighlighting(
-                    consumer,
-                    element,
-                    typeElement,
-                    "AbpModule",
-                    "Abp module",
-                    "Abp module",
-                    iconHost.Transform(AbpIcons.AbpModule),
-                    CreateAbpModuleActionFactory((IClass)typeElement, declaration.GetPsiModule()),
-                    null);
+                // AddHighlighting(
+                //     consumer,
+                //     element,
+                //     typeElement,
+                //     "AbpModule",
+                //     "Abp module",
+                //     "Abp module",
+                //     iconHost.Transform(AbpInsightIcons.AbpModule),
+                //     null, //CreateAbpModuleActionFactory((IClass)typeElement, treeNode.GetPsiModule()),
+                //     null);
             }
 
-            if (insighter.TryGetInjectableService(typeElement,out var injectable))
+            if (insighter.TryGetInjectableService(typeElement, out var injectable))
             {
-                consumer.AddImplicitUsedHighlighting(element);
+                consumer.AddImplicitConfigurableHighlighting(element);
             }
         }
 
@@ -131,5 +133,31 @@ public class TypeCodeInsightProvider(
                 }
             }
         }
+    }
+
+    protected virtual void ShowOccurrences(IDataContext context, string emptyTooltip, InlineSearchRequest inlineSearchRequest)
+    {
+        var tooltipManager = Shell.Instance.GetComponent<ITooltipManager>();
+
+        Lifetime.Using(lifetime =>
+        {
+            var occurrences = inlineSearchRequest.Search();
+
+
+            if (occurrences is not { Count: > 0 })
+                tooltipManager.ShowIfPopupWindowContext(emptyTooltip, context);
+            else
+                occurrencePopupMenu.ShowMenuFromTextControl(
+                    context,
+                    occurrences,
+                    new OccurrencePopupMenuOptions(
+                        inlineSearchRequest.Title,
+                        true,
+                        new OccurrencePresentationOptions
+                        {
+                            TextDisplayStyle = TextDisplayStyle.ContainingType,
+                            LocationStyle = GlobalLocationStyle.None
+                        }, null, () => inlineSearchRequest.CreateSearchDescriptor(occurrences)));
+        });
     }
 }
