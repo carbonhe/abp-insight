@@ -29,7 +29,7 @@ extra["rdLibDirectory"] = rdLibDirectory
 val repoRoot = projectDir.parentFile!!
 val backendRoot = File(repoRoot, "resharper")
 
-version = "0.0.1"
+version = "0.0.2"
 
 
 sourceSets {
