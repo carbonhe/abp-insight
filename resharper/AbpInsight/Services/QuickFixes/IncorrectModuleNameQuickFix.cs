@@ -12,7 +12,7 @@ using JetBrains.Util;
 namespace AbpInsight.Services.QuickFixes;
 
 [QuickFix]
-public class IncorrectModuleNameQuickFix(IncorrectModuleNamingWarning warning) : QuickFixBase
+public class IncorrectModuleNameQuickFix(IncorrectModuleNamingWarning warning) : AbpInsightQuickFixBase
 {
     private string SuggestedName => $"{warning.ClassDeclaration.NameIdentifier.Name}Module";
     private IDeclaredElement? DeclaredElement => warning.ClassDeclaration.DeclaredElement;

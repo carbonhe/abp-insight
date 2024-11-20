@@ -4,7 +4,6 @@ using AbpInsight.Framework;
 using AbpInsight.Resources;
 using AbpInsight.Utils;
 using JetBrains.Application.Parts;
-using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.Application.UI.Controls.BulbMenu.Items;
 using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
@@ -80,7 +79,7 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
             }),
             "Show dependant modules",
             PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id,
-            BulbMenuAnchors.FirstClassContextItems);
+            AbpInsightAnchors.BulbGroup);
     }
 
     private static void SearchDependantModules(IClass clazz, ISet<IClass> dependencies)
