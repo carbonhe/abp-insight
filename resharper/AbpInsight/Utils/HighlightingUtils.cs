@@ -9,6 +9,6 @@ public static class HighlightingUtils
 {
     public static void AddImplicitConfigurableHighlighting(this IHighlightingConsumer consumer, ICSharpDeclaration declaration)
     {
-        consumer.AddHighlighting(new AbpImplicitlyUsedIdentifierHighlighting(declaration.GetNameDocumentRange()));
+        consumer.AddHighlighting(new AbpInsightImplicitlyUsedIdentifierHighlighting(declaration.GetNameDocumentRange()));
     }
 }

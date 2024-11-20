@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace AbpInsight.Rider.Tests.Analysis;
 
 [TestAbpInsight]
-public class ModuleTypeProblemAnalyzerTests : CSharpHighlightingTestBase<CSharpAbpHighlightingBase>
+public class ModuleTypeProblemAnalyzerTests : CSharpHighlightingTestBase<CSharpAbpInsightHighlightingBase>
 {
     protected override string RelativeTestDataPath => @"Analysis";
 

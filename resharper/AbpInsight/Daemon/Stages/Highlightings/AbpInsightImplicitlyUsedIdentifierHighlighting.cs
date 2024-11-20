@@ -7,10 +7,10 @@ namespace AbpInsight.Daemon.Stages.Highlightings;
 [StaticSeverityHighlighting(
     Severity.INFO,
     typeof(HighlightingGroupIds.IdentifierHighlightings),
-    AttributeId = AbpHighlightingAttributeIds.ImplicitlyUsedIdentifier,
+    AttributeId = AbpInsightHighlightingAttributeIds.AbpInsightImplicitlyUsedIdentifier,
     Languages = CSharpLanguage.Name,
     OverlapResolve = OverlapResolveKind.NONE)]
-public class AbpImplicitlyUsedIdentifierHighlighting(DocumentRange documentRange) : IHighlighting, IAbpIndicatorHighlighting
+public class AbpInsightImplicitlyUsedIdentifierHighlighting(DocumentRange documentRange) : IHighlighting, IAbpInsightIndicatorHighlighting
 {
     public bool IsValid() => true;
 

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AbpInsight.Daemon.CodeInsights;
 using AbpInsight.Framework;
 using AbpInsight.Resources;
 using AbpInsight.Utils;
-using JetBrains.Application.DataContext;
 using JetBrains.Application.Parts;
 using JetBrains.Application.UI.Controls.BulbMenu.Anchors;
 using JetBrains.Application.UI.Controls.BulbMenu.Items;
+using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Daemon.Specific.InheritedGutterMark;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Psi;
@@ -21,12 +21,11 @@ using JetBrains.ReSharper.Resources.Resources.Icons;
 namespace AbpInsight.Daemon.Stages.Highlightings.Providers;
 
 [SolutionComponent(Instantiation.DemandAnyThreadUnsafe)]
-public class TypeDetector(AbpInsighter insighter, CodeInsightProvider codeInsightProvider, ISolution solution)
-    : IAbpDeclarationHighlightingProvider
+public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingProvider
 {
     public bool AddDeclarationHighlighting(IDeclaration treeNode, IHighlightingConsumer consumer)
     {
-        if (treeNode is not IClassLikeDeclaration declaration)
+        if (treeNode is not IClassDeclaration declaration)
             return false;
         var typeElement = declaration.DeclaredElement;
 
@@ -42,44 +41,43 @@ public class TypeDetector(AbpInsighter insighter, CodeInsightProvider codeInsigh
     }
 
 
-    private void AddModuleTypeHighlighting(IHighlightingConsumer consumer, IClassLikeDeclaration declaration, IClass clazz)
+    private void AddModuleTypeHighlighting(IHighlightingConsumer consumer, IClassDeclaration declaration, IClass clazz)
     {
         consumer.AddImplicitConfigurableHighlighting(declaration);
 
-        codeInsightProvider.AddHighlighting(
-            consumer,
-            declaration,
-            clazz,
-            "AbpModule",
-            "Abp module",
-            "AbpModule",
-            AbpInsightIcons.AbpModule,
-            ctx => CreateModuleTypeBulbItems(ctx, clazz)
-            ,
-            null);
+
+        consumer.AddHighlighting(
+            new AbpInsightGutterMarkHighlighting(
+                declaration,
+                "",
+                CreateModuleTypeBulbItems(declaration.GetNameDocumentRange(), clazz)));
     }
 
-    private static IEnumerable<BulbMenuItem> CreateModuleTypeBulbItems(IDataContext dataContext, IClass clazz)
+    private static IEnumerable<BulbMenuItem> CreateModuleTypeBulbItems(DocumentRange documentRange, IClass clazz)
     {
         yield return new BulbMenuItem(
-            new ExecutableItem(() => new InlineSearchRequest(
-                $"Dependant modules by '{clazz.ShortName}'",
-                clazz.GetSolution(),
-                new[] { clazz },
-                pi =>
-                {
-                    var dependencies = new JetHashSet<IClass>(DeclaredElementEqualityComparer.TypeElementComparer) { clazz };
-
-                    using (CompilationContextCookie.GetExplicitUniversalContextIfNotSet())
+            new ExecutableItem(() =>
+            {
+                var searchRequest = new InlineSearchRequest(
+                    $"Dependant modules by '{clazz.ShortName}'",
+                    clazz.GetSolution(),
+                    new[] { clazz },
+                    pi =>
                     {
-                        SearchDependantModules(clazz, dependencies);
+                        var dependencies = new JetHashSet<IClass>(DeclaredElementEqualityComparer.TypeElementComparer) { clazz };
+
+                        using (CompilationContextCookie.GetExplicitUniversalContextIfNotSet())
+                        {
+                            SearchDependantModules(clazz, dependencies);
+                        }
+
+                        dependencies.Remove(clazz);
+
+                        return dependencies.Select(it => new DeclaredElementOccurrence(it)).ToArray();
                     }
-
-                    dependencies.Remove(clazz);
-
-                    return dependencies.Select(it => new DeclaredElementOccurrence(it)).ToArray();
-                }
-            ).ShowOccurrences(dataContext, $"'{clazz.ShortName}' has no module dependencies")),
+                );
+                TypeMarkOnGutterBase.ShowMenu(AbpInsightIcons.Logo.Id, documentRange, _ => searchRequest);
+            }),
             "Show dependant modules",
             PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id,
             BulbMenuAnchors.FirstClassContextItems);

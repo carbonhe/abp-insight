@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Errors language="C#" configurableSeverityImplementationLanguage="CSHARP"
-        baseClass="CSharpAbpHighlightingBase, IAbpAnalyzerHighlighting">
+        baseClass="CSharpAbpInsightHighlightingBase, IAbpInsightAnalyzerHighlighting">
 
     <Usings>
         JetBrains.ReSharper.Psi.CSharp;
@@ -11,9 +11,9 @@
 
 
     <StaticSeverityGroups>
-        <Group name="Abp Errors" key="AbpErrors"/>
-        <Group name="Abp Warnings" key="AbpWarnings"/>
-        <Group name="Abp Suggestions" key="AbpSuggestions"/>
+        <Group name="AbpInsight Errors" key="AbpInsightErrors"/>
+        <Group name="AbpInsight Warnings" key="AbpInsightWarnings"/>
+        <Group name="AbpInsight Suggestions" key="AbpInsightSuggestions"/>
     </StaticSeverityGroups>
 
     <!-- Register the configurable severities
@@ -37,7 +37,7 @@
        item name
      -->
     <SeverityConfiguration>
-        <Group name="AbpHighlightingGroupIds.Abp">
+        <Group name="AbpInsightHighlightingGroupIds.AbpInsight">
             <Tag externalName="IncorrectModuleNamingWarning.HIGHLIGHTING_ID" default="SUGGESTION">
                 <Title resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
                 <Description resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
@@ -67,5 +67,5 @@
         <Range>CSharpErrorUtil.InternalRange("AccessRightsRange",ClassDeclaration)</Range>
         <Behavour overlapResolvePolicy="ERROR"/>
     </Error>
-    
+
 </Errors>

@@ -19,7 +19,7 @@ namespace AbpInsight.Daemon.CodeInsights;
     NotRecyclable = true,
     TransmitUpdates = true)]
 [StaticSeverityHighlighting(Severity.INFO, typeof(HighlightingGroupIds.CodeInsights), AttributeId = Id, OverlapResolve = OverlapResolveKind.NONE)]
-public class AbpCodeInsightHighlighting(
+public class AbpInsightCodeInsightHighlighting(
     DocumentRange range,
     string displayText,
     string tooltipText,
@@ -29,9 +29,9 @@ public class AbpCodeInsightHighlighting(
     IconModel? icon,
     Func<IDataContext, IEnumerable<BulbMenuItem>> createBulbMenuItems,
     List<CodeVisionEntryExtraActionModel>? extraActions)
-    : CodeInsightsHighlighting(range, displayText, tooltipText, moreText, provider, elt, icon, extraActions), IAbpIndicatorHighlighting
+    : CodeInsightsHighlighting(range, displayText, tooltipText, moreText, provider, elt, icon, extraActions), IAbpInsightIndicatorHighlighting
 {
-    private new const string Id = "AbpCodeInsights";
+    private new const string Id = "AbpInsightCodeInsights";
 
     public IEnumerable<BulbMenuItem> CreateBulbMenuItems(IDataContext dataContext) => createBulbMenuItems(dataContext);
 }

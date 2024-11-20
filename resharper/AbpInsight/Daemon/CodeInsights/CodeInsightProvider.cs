@@ -39,7 +39,7 @@ public class CodeInsightProvider(
 
     public void OnClick(CodeInsightHighlightInfo highlightInfo, ISolution solution)
     {
-        if (highlightInfo.CodeInsightsHighlighting is AbpCodeInsightHighlighting highlighting)
+        if (highlightInfo.CodeInsightsHighlighting is AbpInsightCodeInsightHighlighting highlighting)
         {
             Lifetime.Using(lt =>
             {
@@ -70,7 +70,7 @@ public class CodeInsightProvider(
         Func<IDataContext, IEnumerable<BulbMenuItem>> createMenuItems,
         List<CodeVisionEntryExtraActionModel>? extraActions)
     {
-        consumer.AddHighlighting(new AbpCodeInsightHighlighting(
+        consumer.AddHighlighting(new AbpInsightCodeInsightHighlighting(
             element.GetNameDocumentRange(),
             displayName,
             tooltip,
