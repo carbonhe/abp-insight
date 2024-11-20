@@ -12,7 +12,7 @@ namespace AbpInsight.Daemon.Stages.Highlightings;
 
 public abstract class AbstractAbpInsightGutterMark(IconId iconId) : IconGutterMarkType(iconId)
 {
-    public override IAnchor Priority => BulbMenuAnchors.PermanentItem;
+    public override IAnchor Priority => BulbMenuAnchors.FirstClassContextItems;
 
 
     public override IEnumerable<BulbMenuItem> GetBulbMenuItems(IHighlighter highlighter)
