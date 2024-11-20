@@ -16,9 +16,16 @@ Open `Setttings` -> `Plugins`, switch to `Marketplace` tab, search "Abp Insight"
 
 ![installation](screenshots/installation.jpg)
 
+### Implemented features
+
+- Search Abp module dependencies.
+- Inspect Abp module naming and quick fix it.(Abp module name should end with 'Module')
+
 ### Expected features
 
-...
+- Inspect `ApplicationService` in IDE's Endpoints tool window.
+- Inspect incorrect dependency injection usage, such as circular dependency, unresolved constructor injection, etc. 
+
 
 
 

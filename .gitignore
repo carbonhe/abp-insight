@@ -7,5 +7,5 @@ riderModule.iml
 *.generated.cs
 .DS_Store
 
-
+.idea
 *.DotSettings.user
