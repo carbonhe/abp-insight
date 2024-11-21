@@ -77,7 +77,7 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
                 );
                 TypeMarkOnGutterBase.ShowMenu(AbpInsightIcons.Logo.Id, documentRange, _ => searchRequest);
             }),
-            "Show dependant modules",
+            "Show dependant Abp modules",
             PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id,
             AbpInsightAnchors.BulbGroup);
     }
