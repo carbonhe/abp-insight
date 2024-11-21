@@ -75,7 +75,7 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
 
                         return dependencies.Select(it => new DeclaredElementOccurrence(it)).ToArray();
                     }
-                ).ShowOccurrences(range, $"{clazz.ShortName} doesn't has dependant modules");
+                ).ShowOccurrences(range, $"'{clazz.ShortName}' doesn't has any dependant modules");
             }),
             "Navigate to dependant Abp modules", PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id, AbpInsightAnchors.BulbGroup);
         yield return new BulbMenuItem(new ExecutableItem(() =>
