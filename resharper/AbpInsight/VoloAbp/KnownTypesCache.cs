@@ -5,9 +5,9 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
 
-namespace AbpInsight.Framework;
+namespace AbpInsight.VoloAbp;
 
-[SolutionComponent(Instantiation.DemandAnyThread)]
+[SolutionComponent(Instantiation.DemandAnyThreadUnsafe)]
 public class KnownTypesCache
 {
     private readonly ConcurrentDictionary<IClrTypeName, IDeclaredType> _types = new();

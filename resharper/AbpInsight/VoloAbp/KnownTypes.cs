@@ -2,7 +2,7 @@
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 
-namespace AbpInsight.Framework;
+namespace AbpInsight.VoloAbp;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public static class KnownTypes
@@ -19,6 +19,10 @@ public static class KnownTypes
     public static readonly IClrTypeName DependencyAttribute = new ClrTypeName("Volo.Abp.DependencyInjection.DependencyAttribute");
     public static readonly IClrTypeName ExposeServicesAttribute = new ClrTypeName("Volo.Abp.DependencyInjection.ExposeServicesAttribute");
     public static readonly IClrTypeName ServiceLifetime = new ClrTypeName("Microsoft.Extensions.DependencyInjection.ServiceLifetime");
+
+    public static readonly IClrTypeName DisableConventionalRegistrationAttribute =
+        new ClrTypeName("Volo.Abp.DependencyInjection.DisableConventionalRegistrationAttribute");
+
 
     // ApplicationService
     public static readonly IClrTypeName IApplicationService = new ClrTypeName("Volo.Abp.Application.Services.IApplicationService");

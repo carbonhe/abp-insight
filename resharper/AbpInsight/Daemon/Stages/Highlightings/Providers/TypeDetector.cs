@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AbpInsight.Framework;
-using AbpInsight.Resources;
 using AbpInsight.Utils;
+using AbpInsight.VoloAbp;
+using AbpInsight.VoloAbp.DependencyInjection;
 using JetBrains.Application.Parts;
 using JetBrains.Application.UI.Controls.BulbMenu.Items;
-using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Daemon.Specific.InheritedGutterMark;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Impl;
+using JetBrains.ReSharper.Psi.Resources;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Resources.Resources.Icons;
@@ -40,7 +39,7 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
     }
 
 
-    private void AddModuleTypeHighlighting(IHighlightingConsumer consumer, IClassDeclaration declaration, IClass clazz)
+    private static void AddModuleTypeHighlighting(IHighlightingConsumer consumer, IClassDeclaration declaration, IClass clazz)
     {
         consumer.AddImplicitConfigurableHighlighting(declaration);
 
@@ -49,15 +48,17 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
             new AbpInsightGutterMarkHighlighting(
                 declaration,
                 "",
-                CreateModuleTypeBulbItems(declaration.GetNameDocumentRange(), clazz)));
+                CreateModuleTypeBulbItems(declaration, clazz)));
     }
 
-    private static IEnumerable<BulbMenuItem> CreateModuleTypeBulbItems(DocumentRange documentRange, IClass clazz)
+    private static IEnumerable<BulbMenuItem> CreateModuleTypeBulbItems(IClassDeclaration declaration, IClass clazz)
     {
+        var range = declaration.GetNameDocumentRange();
+
         yield return new BulbMenuItem(
             new ExecutableItem(() =>
             {
-                var searchRequest = new InlineSearchRequest(
+                new InlineSearchRequest(
                     $"Dependant modules by '{clazz.ShortName}'",
                     clazz.GetSolution(),
                     new[] { clazz },
@@ -74,12 +75,24 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
 
                         return dependencies.Select(it => new DeclaredElementOccurrence(it)).ToArray();
                     }
-                );
-                TypeMarkOnGutterBase.ShowMenu(AbpInsightIcons.Logo.Id, documentRange, _ => searchRequest);
+                ).ShowOccurrences(range, $"{clazz.ShortName} doesn't has dependant modules");
             }),
-            "Show dependant Abp modules",
-            PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id,
-            AbpInsightAnchors.BulbGroup);
+            "Navigate to dependant Abp modules", PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id, AbpInsightAnchors.BulbGroup);
+        yield return new BulbMenuItem(new ExecutableItem(() =>
+            {
+                new InlineSearchRequest(
+                    $"Service declarations in '{clazz.ShortName}'",
+                    clazz.GetSolution(),
+                    new[] { clazz },
+                    pi =>
+                    {
+                        var dependencyDescriptors = ConventionalDependencyScanner.Scan(declaration.GetPsiModule());
+
+                        return dependencyDescriptors.Select(it => new DeclaredElementOccurrence(it.Implementation)).ToArray();
+                    }
+                ).ShowOccurrences(range, $"There is no service declarations in '{clazz.ShortName}'");
+            }),
+            "Navigate to service declarations", PsiSymbolsThemedIcons.BaseClass.Id, AbpInsightAnchors.BulbGroup);
     }
 
     private static void SearchDependantModules(IClass clazz, ISet<IClass> dependencies)

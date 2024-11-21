@@ -1,10 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using AbpInsight.Framework;
-using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using AbpInsight.VoloAbp;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.ReSharper.Psi.Util;
 
 namespace AbpInsight.Utils;
 
@@ -17,6 +19,11 @@ public static class DeclaredElementExtensions
         var knownTypesCache = candidate.GetSolution().GetComponent<KnownTypesCache>();
         var baseType = GetTypeElement(baseTypeName, knownTypesCache, candidate.Module);
         return candidate.IsDescendantOf(baseType);
+    }
+
+    public static IEnumerable<IInterface> GetAllInterfaces(this ITypeElement typeElement)
+    {
+        return from superType in typeElement.GetAllSuperTypes() where superType.IsInterfaceType() select superType.GetInterfaceType()!;
     }
 
 

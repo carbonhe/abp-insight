@@ -1,6 +1,5 @@
-﻿using System;
-using AbpInsight.Framework;
-using AbpInsight.ProjectModel;
+﻿using AbpInsight.ProjectModel;
+using AbpInsight.VoloAbp;
 using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.Application.Parts;

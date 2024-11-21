@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AbpInsight.Daemon.Stages.Highlightings;
 using AbpInsight.Daemon.Stages.Highlightings.Providers;
-using AbpInsight.Framework;
+using AbpInsight.VoloAbp;
 using JetBrains.ReSharper.Daemon.CSharp.Stages;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 

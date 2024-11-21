@@ -1,5 +1,5 @@
 ﻿using AbpInsight.Daemon.Errors;
-using AbpInsight.Framework;
+using AbpInsight.VoloAbp;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -14,7 +14,7 @@ namespace AbpInsight.Daemon.Stages.Analysis;
         typeof(ModuleTypeMustBePublicError),
         typeof(ModuleContainsParameterizedConstructorError)
     ])]
-public class ModuleTypeProblemAnalyzer(AbpInsighter insighter) : AbpInsightProblemAnalyzer<IClassDeclaration>(insighter)
+public class ModuleTypeProblemAnalyzer(AbpInsighter insighter) : AbpInsightProblemAnalyzer<IClassDeclaration>()
 {
     protected override void Analyze(IClassDeclaration element, ElementProblemAnalyzerData data, IHighlightingConsumer consumer)
     {
