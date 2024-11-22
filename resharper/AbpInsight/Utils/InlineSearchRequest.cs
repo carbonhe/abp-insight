@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Application.DataContext;
 using JetBrains.Application.Progress;
-using JetBrains.Application.Settings;
 using JetBrains.Application.UI.ActionSystem.ActionsRevised.Handlers;
 using JetBrains.Application.UI.Controls;
 using JetBrains.Application.UI.DataContext;
@@ -15,7 +14,6 @@ using JetBrains.ProjectModel;
 using JetBrains.RdBackend.Common.Features.Services;
 using JetBrains.ReSharper.Daemon.Specific.InheritedGutterMark;
 using JetBrains.ReSharper.Feature.Services.Navigation.Descriptors;
-using JetBrains.ReSharper.Feature.Services.Navigation.Options;
 using JetBrains.ReSharper.Feature.Services.Navigation.Requests;
 using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Feature.Services.Tree;
@@ -23,11 +21,8 @@ using JetBrains.ReSharper.Feature.Services.Tree.SectionsManagement;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Resources.Shell;
-using JetBrains.TextControl.CodeWithMe;
 using JetBrains.TextControl.Coords;
 using JetBrains.TextControl.DataContext;
-using JetBrains.TextControl.DocumentMarkup;
-using JetBrains.TextControl.TextControlsManagement;
 using JetBrains.UI.Icons;
 
 namespace AbpInsight.Utils;
@@ -38,13 +33,6 @@ public class InlineSearchRequest(
     ICollection searchTargets,
     Func<IProgressIndicator, ICollection<IOccurrence>> search) : SearchRequest
 {
-    public InlineSearchRequest(string title,
-        ISolution solution,
-        ICollection searchTargets,
-        ICollection<IOccurrence> occurrences) : this(title, solution, searchTargets, _ => occurrences)
-    {
-    }
-
     public override string Title => title;
 
     public override ISolution Solution => solution;
@@ -70,21 +58,20 @@ public class InlineSearchRequest(
                 Lifetime.Using(lifetime =>
                 {
                     var dataRules = DataRules.AddRule<PopupWindowContextSource>("GutterMarkWindowSource",
-                        UIDataConstants.PopupWindowContextSource, GuessPopupWindowContext(range));
+                        UIDataConstants.PopupWindowContextSource,
+                        new PopupWindowContextSource(_ => new RiderEditorOffsetPopupWindowContext(range.StartOffset.Offset)));
                     var ctx = dataContexts.CreateOnActiveControl(lifetime, dataRules);
                     if (textControlPos == null ||
                         !textControlPos.Equals(ctx.GetData<ITextControlPos>(TextControlDataConstants.TextControlPosition)))
                         return;
-                    var skipMenuIfSingleEnabled = solution.GetComponent<ISettingsStore>()
-                        .GetValue<SearchAndNavigationSettings, bool>(ctx,
-                            SearchAndNavigationOptions.GotoSingleHierarchyItemImmediatelyExpression);
-                    var component3 = solution.GetComponent<OccurrencePopupMenu>();
+
+                    var popupMenu = solution.GetComponent<OccurrencePopupMenu>();
                     var occurrences = Search();
                     if (occurrences == null || occurrences.Count == 0)
                     {
                         var tooltipManager = Shell.Instance.GetComponent<ITooltipManager>();
                         var source = new PopupWindowContextSource(lt =>
-                            new RiderEditorOffsetPopupWindowContext(range.StartOffset.Offset));
+                            new RiderEditorOffsetPopupWindowContext((range.StartOffset.Offset + range.EndOffset.Offset) / 2));
                         Lifetime.Define(Lifetime.Eternal,
                             "Tooltip",
                             def => tooltipManager.Show(def, WindowlessControlAutomation.Create(emptyTooltip), source.Create(def.Lifetime), null,
@@ -93,22 +80,10 @@ public class InlineSearchRequest(
                     }
 
                     var popupMenuOptions =
-                        popupMenuBehaviour.GetPopupMenuOptions(iconId, this, occurrences, skipMenuIfSingleEnabled);
-                    component3.ShowMenuFromTextControl(ctx, occurrences, popupMenuOptions);
+                        popupMenuBehaviour.GetPopupMenuOptions(iconId, this, occurrences, true);
+                    popupMenu.ShowMenuFromTextControl(ctx, occurrences, popupMenuOptions);
                 });
         }), (Action)(() => { }), true);
-    }
-
-
-    private static PopupWindowContextSource GuessPopupWindowContext(DocumentRange range)
-    {
-        PopupWindowContextSource? windowContextSource = null;
-        var textControl = Shell.Instance.GetComponent<TextControlManager>().CurrentFrameTextControlPerClient.ForCurrentClient();
-        if (textControl != null)
-            windowContextSource = Shell.Instance.GetComponent<GutterMarkMenuLayouter>().GetPopupWindowContextForLine(textControl, range);
-        if (windowContextSource == null)
-            windowContextSource = Shell.Instance.GetComponent<IMainWindowPopupWindowContext>().Source;
-        return windowContextSource;
     }
 }
 
