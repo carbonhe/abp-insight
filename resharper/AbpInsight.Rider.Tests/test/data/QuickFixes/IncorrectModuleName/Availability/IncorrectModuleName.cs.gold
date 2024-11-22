@@ -14,7 +14,9 @@ public class |Test02module|(1) : AbpModule
 ------------------------------------------------
 0: Abp module name should end with 'Module'
 QUICKFIXES:
+Abp Insight
 Rename to 'Test01Module'
 1: Abp module name should end with 'Module'
 QUICKFIXES:
+Abp Insight
 Rename to 'Test02moduleModule'
