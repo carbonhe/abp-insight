@@ -59,7 +59,7 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
             new ExecutableItem(() =>
             {
                 new InlineSearchRequest(
-                    $"Dependant modules by '{clazz.ShortName}'",
+                    $"Module dependencies of '{clazz.ShortName}'",
                     clazz.GetSolution(),
                     new[] { clazz },
                     pi =>
@@ -75,9 +75,9 @@ public class TypeDetector(AbpInsighter insighter) : IAbpDeclarationHighlightingP
 
                         return dependencies.Select(it => new DeclaredElementOccurrence(it)).ToArray();
                     }
-                ).ShowOccurrences(range, $"'{clazz.ShortName}' doesn't has any dependant modules");
+                ).ShowOccurrences(range, $"'{clazz.ShortName}' has no module dependencies");
             }),
-            "Navigate to dependant Abp modules", PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id, AbpInsightAnchors.BulbGroup);
+            "Navigate to module dependencies", PsiFeaturesUnsortedThemedIcons.FindDependentCode.Id, AbpInsightAnchors.BulbGroup);
         yield return new BulbMenuItem(new ExecutableItem(() =>
             {
                 new InlineSearchRequest(
