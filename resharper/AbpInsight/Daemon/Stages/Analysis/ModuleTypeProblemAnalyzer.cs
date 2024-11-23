@@ -23,14 +23,11 @@ public class ModuleTypeProblemAnalyzer(AbpInsighter insighter) : AbpInsightProbl
 
 
         if (!element.NameIdentifier.Name.EndsWith("Module"))
-        {
             consumer.AddHighlighting(new IncorrectModuleNamingWarning(element));
-        }
 
-        if (element.GetAccessRights() != AccessRights.NONE && element.GetAccessRights() != AccessRights.PUBLIC)
-        {
+
+        if (element.GetAccessRights() != AccessRights.PUBLIC)
             consumer.AddHighlighting(new ModuleTypeMustBePublicError(element));
-        }
 
 
         foreach (var constructorDeclaration in element.ConstructorDeclarations.Where(it => it.ParameterDeclarations.Any()))

@@ -38,34 +38,54 @@
      -->
     <SeverityConfiguration>
         <Group name="AbpInsightHighlightingGroupIds.AbpInsight">
-            <Tag externalName="IncorrectModuleNamingWarning.HIGHLIGHTING_ID" default="SUGGESTION">
+
+            <Tag externalName="IncorrectModuleNamingWarning.HIGHLIGHTING_ID" default="WARNING">
                 <Title resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
                 <Description resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
+            </Tag>
+            <Tag externalName="DependencyImplementsMultipleLifetimesWarning.HIGHLIGHTING_ID" default="WARNING">
+                <Title resourceName="DependencyImplementsMultipleLifetimes_Message" resourceType="Strings"/>
+                <Description resourceName="DependencyImplementsMultipleLifetimes_Message" resourceType="Strings"/>
             </Tag>
         </Group>
     </SeverityConfiguration>
 
-    <Warning name="IncorrectModuleNaming" configurableSeverity="Abp.IncorrectModuleNaming">
-        <Parameter type="IClassDeclaration" name="classDeclaration"/>
+
+    <Warning name="IncorrectModuleNaming" configurableSeverity="AbpInsight.IncorrectModuleNaming">
+        <Parameter type="IClassDeclaration" name="declaration"/>
         <Message resourceName="IncorrectModuleNamingWarning_Message" resourceType="Strings"/>
-        <Range>ClassDeclaration.NameIdentifier.GetDocumentRange()</Range>
+        <Range>Declaration.NameIdentifier.GetDocumentRange()</Range>
         <Behavour overlapResolvePolicy="NONE"/>
     </Warning>
 
-    <Error name="ModuleContainsParameterizedConstructor" staticGroup="AbpErrors">
-        <Parameter type="IConstructorDeclaration" name="ConstructorDeclaration"/>
+    <Error name="ModuleContainsParameterizedConstructor" staticGroup="AbpInsightErrors">
+        <Parameter type="IConstructorDeclaration" name="declaration"/>
         <Message resourceName="ModuleContainsParameterizedConstructor_Message" resourceType="Strings">
-            <Argument>ConstructorDeclaration.DeclaredName</Argument>
+            <Argument>Declaration.DeclaredName</Argument>
         </Message>
-        <Range>ConstructorDeclaration.TypeName.GetDocumentRange()</Range>
+        <Range>Declaration.TypeName.GetDocumentRange()</Range>
         <Behavour overlapResolvePolicy="ERROR"/>
     </Error>
 
-    <Error name="ModuleTypeMustBePublic" staticGroup="AbpErrors">
-        <Parameter type="IClassDeclaration" name="classDeclaration"/>
+    <Error name="ModuleTypeMustBePublic" staticGroup="AbpInsightErrors">
+        <Parameter type="IClassDeclaration" name="declaration"/>
         <Message resourceName="ModuleTypeMustBePublic_Message" resourceType="Strings"/>
-        <Range>CSharpErrorUtil.InternalRange("AccessRightsRange",ClassDeclaration)</Range>
+        <Range>CSharpErrorUtil.InternalRange("AccessRightsRange", Declaration)</Range>
         <Behavour overlapResolvePolicy="ERROR"/>
     </Error>
+
+    <Error name="DependencyTypeMustBePublic" staticGroup="AbpInsightErrors">
+        <Parameter type="IClassDeclaration" name="declaration"/>
+        <Message resourceName="DependencyTypeMustBePublic_Message" resourceType="Strings"/>
+        <Range>CSharpErrorUtil.InternalRange("AccessRightsRange", Declaration)</Range>
+        <Behavour overlapResolvePolicy="ERROR"/>
+    </Error>
+
+    <Warning name="DependencyImplementsMultipleLifetimes" configurableSeverity="AbpInsight.DependencyImplementsMultipleLifetimes">
+        <Parameter type="IClassDeclaration" name="declaration"/>
+        <Message resourceName="DependencyImplementsMultipleLifetimes_Message" resourceType="Strings"/>
+        <Range>Declaration.NameIdentifier.GetDocumentRange()</Range>
+        <Behavour overlapResolvePolicy="NONE"/>
+    </Warning>
 
 </Errors>

@@ -2,11 +2,11 @@ using JetBrains.ReSharper.Feature.Services.Daemon;
 
 namespace AbpInsight.Daemon.Errors;
 
-[RegisterStaticHighlightingsGroup("Abp Errors", true)]
-public class AbpErrors;
+[RegisterStaticHighlightingsGroup("AbpInsight Errors", true)]
+public class AbpInsightErrors;
 
-[RegisterStaticHighlightingsGroup("Abp Warnings", true)]
-public class AbpWarnings;
+[RegisterStaticHighlightingsGroup("AbpInsight Warnings", true)]
+public class AbpInsightWarnings;
 
-[RegisterStaticHighlightingsGroup("Abp Gutter Marks", true)]
-public class AbpGutterMarks;
+[RegisterStaticHighlightingsGroup("AbpInsight Gutter Marks", true)]
+public class AbpInsightGutterMarks;

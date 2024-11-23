@@ -1,0 +1,22 @@
+﻿using Volo.Abp.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+
+class |Test01|(0) : ITransientDependency
+{
+}
+
+
+[Dependency]
+|internal|(1) class Test02
+{
+}
+
+
+public class |Test03|(2) : ITransientDependency, IScopedDependency
+{
+    
+}
+---------------------------------------------------------
+(0): ReSharper Underlined Error Highlighting: Dependency type must be public
+(1): ReSharper Underlined Error Highlighting: Dependency type must be public
+(2): ReSharper Warning: Dependency type implements multiple lifetime interfaces

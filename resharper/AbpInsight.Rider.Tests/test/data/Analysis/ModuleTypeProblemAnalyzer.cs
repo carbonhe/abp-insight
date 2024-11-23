@@ -19,3 +19,9 @@ internal class Test03 : AbpModule
 {
     
 }
+
+class Test04 : AbpModule
+{
+    
+}
+

@@ -14,12 +14,12 @@ namespace AbpInsight.Services.QuickFixes;
 [QuickFix]
 public class IncorrectModuleNameQuickFix(IncorrectModuleNamingWarning warning) : AbpInsightQuickFixBase
 {
-    private string SuggestedName => $"{warning.ClassDeclaration.NameIdentifier.Name}Module";
-    private IDeclaredElement? DeclaredElement => warning.ClassDeclaration.DeclaredElement;
+    private string SuggestedName => $"{warning.Declaration.NameIdentifier.Name}Module";
+    private IDeclaredElement? DeclaredElement => warning.Declaration.DeclaredElement;
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-        return RenameIntentionUtils.Rename(solution, warning.ClassDeclaration.DeclaredElement.NotNull(), SuggestedName);
+        return RenameIntentionUtils.Rename(solution, warning.Declaration.DeclaredElement.NotNull(), SuggestedName);
     }
 
 

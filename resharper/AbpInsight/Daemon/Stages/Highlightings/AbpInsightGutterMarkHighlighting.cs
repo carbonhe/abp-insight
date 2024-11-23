@@ -9,7 +9,7 @@ using JetBrains.ReSharper.Psi.Tree;
 
 namespace AbpInsight.Daemon.Stages.Highlightings;
 
-[StaticSeverityHighlighting(Severity.INFO, typeof(AbpGutterMarks), Languages = CSharpLanguage.Name, OverlapResolve = OverlapResolveKind.NONE)]
+[StaticSeverityHighlighting(Severity.INFO, typeof(AbpInsightGutterMarks), Languages = CSharpLanguage.Name, OverlapResolve = OverlapResolveKind.NONE)]
 public class AbpInsightGutterMarkHighlighting(IClassDeclaration classDeclaration, string tooltip, IEnumerable<BulbMenuItem>? menuItems = null)
     : IAbpInsightGutterMarkHighlighting
 {

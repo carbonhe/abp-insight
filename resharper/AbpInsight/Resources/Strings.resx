@@ -3,7 +3,7 @@
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -26,5 +26,11 @@
     </data>
     <data name="ModuleTypeMustBePublic_Message" xml:space="preserve">
         <value>Abp module type must be public</value>
+    </data>
+    <data name="DependencyTypeMustBePublic_Message" xml:space="preserve">
+        <value>Dependency type must be public</value>
+    </data>
+    <data name="DependencyImplementsMultipleLifetimes_Message" xml:space="preserve">
+        <value>Dependency type implements multiple lifetime interfaces</value>
     </data>
 </root>

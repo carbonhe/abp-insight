@@ -7,6 +7,8 @@ namespace AbpInsight.Rider.Tests.Analysis;
 
 public abstract class CSharpHighlightingTestBase<T> : CSharpHighlightingTestBase
 {
+    protected override string RelativeTestDataPath => @"Analysis";
+
     protected override bool HighlightingPredicate(IHighlighting highlighting, IPsiSourceFile sourceFile,
         IContextBoundSettingsStore settingsStore)
     {
