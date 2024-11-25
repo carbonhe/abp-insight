@@ -11,6 +11,9 @@
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Rider.SDK" Version="$(SdkVersion)"/>
+        <PackageReference Include="CitizenMatt.ReSharper.LiveTemplateCompiler" Version="3.6.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -20,4 +23,16 @@
             <Mode>ERRORS</Mode>
         </ErrorsGen>
     </ItemGroup>
+
+    <ItemGroup Label="Live templates">
+        <LiveTemplate Include="Templates\**\*.md">
+            <OutputFile>Templates\templates.generated.dotSettings</OutputFile>
+            <ReadmeFile>Templates\README.md</ReadmeFile>
+        </LiveTemplate>
+        
+        <EmbeddedResource Include="Templates\templates.generated.dotSettings">
+            <LogicalName>AbpInsight.Templates.templates.dotSettings</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

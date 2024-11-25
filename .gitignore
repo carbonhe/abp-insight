@@ -9,3 +9,5 @@ riderModule.iml
 
 .idea
 *.DotSettings.user
+
+*.generated.dotSettings
