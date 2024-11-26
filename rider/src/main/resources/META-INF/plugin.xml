@@ -9,8 +9,13 @@
         <projectConfigurable parentId="FileTemplatesSettingsId"
                              instance="com.carbon.settings.AbpInsightTemplatesOptionPage"
                              groupWeight="-120" displayName="Abp Insight"/>
-
     </extensions>
+
+    <actions>
+        <action id="AddAbpWidgetAction" class="com.carbon.actions.AddAbpWidgetAction">
+            <add-to-group group-id="SolutionViewAddGroup.TechnologySection" anchor="first"/>
+        </action>
+    </actions>
 
     <description><![CDATA[
 <p>Adds navigation, auto-completion and inspections specific to the <a href="https://abp.io/">Abp Framework</a>.</p>
@@ -22,6 +27,8 @@
 </ul>
 </p>
 ]]>
+
     </description>
+
 
 </idea-plugin>

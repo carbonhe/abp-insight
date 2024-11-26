@@ -33,4 +33,7 @@
     <data name="DependencyImplementsMultipleLifetimes_Message" xml:space="preserve">
         <value>Dependency type implements multiple lifetime interfaces</value>
     </data>
+    <data name="AddAbpWidget_Description" xml:space="preserve">
+        <value>Abp Widget</value>
+    </data>
 </root>

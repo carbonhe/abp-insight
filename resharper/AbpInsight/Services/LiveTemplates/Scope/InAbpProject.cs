@@ -8,7 +8,7 @@ namespace AbpInsight.Services.LiveTemplates.Scope;
 
 public class InAbpProject : InLanguageSpecificProject
 {
-    private static readonly Guid DefaultId = new("34DB6039-873B-406F-B0B5-E452DF7236C7");
+    private static readonly Guid Id = new("34DB6039-873B-406F-B0B5-E452DF7236C7");
     private static readonly Guid QuickId = new("1A8435F0-E7AF-4180-A5AE-BF568D993879");
 
     public InAbpProject() : base(ProjectLanguage.CSHARP)
@@ -16,7 +16,7 @@ public class InAbpProject : InLanguageSpecificProject
         AdditionalSuperTypes.Add(typeof(InLanguageSpecificProject));
     }
 
-    public override Guid GetDefaultUID() => DefaultId;
+    public override Guid GetDefaultUID() => Id;
     public override string PresentableShortName => QuickListTitle;
 
     public override PsiLanguageType RelatedLanguage => CSharpLanguage.Instance!;
@@ -28,9 +28,9 @@ public class InAbpProject : InLanguageSpecificProject
 
 public class InAbpWidgetProject : InAbpProject
 {
-    private static readonly Guid DefaultId = new Guid("7F818B20-832E-473F-847B-C10BCA1350B9");
+    public static readonly Guid Id = new("7F818B20-832E-473F-847B-C10BCA1350B9");
 
-    public override Guid GetDefaultUID() => DefaultId;
+    public override Guid GetDefaultUID() => Id;
 
     public override string PresentableShortName => "Abp widget project";
 }

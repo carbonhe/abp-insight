@@ -6,7 +6,7 @@ reformat: True
 shortenReferences: True
 categories: AbpInsight
 customProperties: Extension=cs, FileName=AbpWidget, ValidateFileName=True
-scopes: InAbpWidgetProject
+scopes: NotInAnyProject
 uitag: Abp Widget
 parameterOrder: HEADER, (CLASS), (NAMESPACE)
 HEADER-expression: fileheader()
