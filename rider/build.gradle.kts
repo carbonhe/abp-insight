@@ -1,4 +1,7 @@
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.jetbrains.changelog.Changelog
+import org.jetbrains.changelog.ChangelogSectionUrlBuilder
+import org.jetbrains.changelog.date
 import org.jetbrains.intellij.IntelliJPluginConstants
 import org.jetbrains.intellij.tasks.SetupDependenciesTask
 
@@ -6,6 +9,7 @@ plugins {
     id("java")
     id("com.jetbrains.rdgen")
     id("org.jetbrains.intellij") version "1.15.0"
+    id("org.jetbrains.changelog") version "2.2.1"
     kotlin("jvm") version "1.9.0"
 }
 
@@ -28,9 +32,6 @@ extra["rdLibDirectory"] = rdLibDirectory
 
 val repoRoot = projectDir.parentFile!!
 val backendRoot = File(repoRoot, "resharper")
-
-version = "0.0.8"
-
 
 sourceSets {
     main {
@@ -108,8 +109,7 @@ tasks {
 
         if (!extra.has("riderSdkRoot")) {
             extra["riderSdkRoot"] = getByName(
-                IntelliJPluginConstants.SETUP_DEPENDENCIES_TASK_NAME,
-                SetupDependenciesTask::class
+                IntelliJPluginConstants.SETUP_DEPENDENCIES_TASK_NAME, SetupDependenciesTask::class
             ).idea.get().classes
         }
 
@@ -137,7 +137,32 @@ tasks {
     }
 
     patchPluginXml {
+        dependsOn(patchChangelog)
         sinceBuild.set("243")
+
+        changelog.getOrNull(version.toString())?.let { item ->
+            changeNotes.set(
+                """
+        <body>
+        <p><b>New in $version</b></p>
+        <p>
+        ${changelog.renderItem(item, Changelog.OutputType.HTML)}
+        </p>
+        <p>See the <a href="https://github.com/carbonhe/abp-insight/blob/main/CHANGELOG.md">CHANGELOG</a> for more details and history.</p>
+        </body>""".trimIndent()
+            )
+        }
+
+    }
+
+    changelog {
+        version.set(project.version.toString())
+        path.set("${project.projectDir}/../CHANGELOG.md")
+        header.set(provider { "${version.get()} (${date()})" })
+        headerParserRegex.set("""(\d+\.\d+)""".toRegex())
+        unreleasedTerm.set("[Unreleased]")
+        groups.set(listOf("Added", "Fixed", "Changed", "Removed"))
+        sectionUrlBuilder.set(ChangelogSectionUrlBuilder { repositoryUrl, currentVersion, previousVersion, isUnreleased -> "unreleased" })
     }
 
 
@@ -150,11 +175,7 @@ tasks {
             val file = File(backendRoot, "AbpInsight/AbpInsight.Rider.csproj")
 
             val buildArguments = listOf(
-                "build",
-                file.canonicalPath,
-                "/p:Configuration=$buildConfiguration",
-                "/p:Version=$version",
-                "/nologo"
+                "build", file.canonicalPath, "/p:Configuration=$buildConfiguration", "/p:Version=$version", "/nologo"
             )
 
             logger.info("dotnet call: '$dotnetCli' '$buildArguments' in '${file.parent}'")
@@ -218,6 +239,23 @@ tasks {
                 }
             }
         }
+    }
+
+
+    register("release") {
+        dependsOn(patchChangelog)
+
+        description = "create the release commit and tag"
+
+        doLast {
+            exec {
+                commandLine("git", "commit", "-m", "release $version", "-a")
+            }
+            exec {
+                commandLine("git", "tag", version.toString())
+            }
+        }
+
     }
 
 }
