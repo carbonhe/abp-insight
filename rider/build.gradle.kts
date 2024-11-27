@@ -241,6 +241,11 @@ tasks {
         }
     }
 
+    publishPlugin {
+        token.set(System.getenv("JB_MARKETPLACE_TOKEN"))
+        channels.set(listOf("Stable"))
+    }
+
 
     register("release") {
         dependsOn(patchChangelog)
