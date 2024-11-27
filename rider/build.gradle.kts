@@ -140,7 +140,7 @@ tasks {
         dependsOn(patchChangelog)
         sinceBuild.set("243")
 
-        changelog.getOrNull(version.toString())?.let { item ->
+        changelog.getOrNull(project.version.toString())?.let { item ->
             changeNotes.set(
                 """
         <body>
@@ -159,7 +159,6 @@ tasks {
         version.set(project.version.toString())
         path.set("${project.projectDir}/../CHANGELOG.md")
         header.set(provider { "${version.get()} (${date()})" })
-        headerParserRegex.set("""(\d+\.\d+)""".toRegex())
         unreleasedTerm.set("[Unreleased]")
         groups.set(listOf("Added", "Fixed", "Changed", "Removed"))
         sectionUrlBuilder.set(ChangelogSectionUrlBuilder { repositoryUrl, currentVersion, previousVersion, isUnreleased -> "unreleased" })
