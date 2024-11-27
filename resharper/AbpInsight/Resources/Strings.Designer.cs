@@ -65,6 +65,7 @@ namespace AbpInsight.Resources
     public static string ModuleTypeMustBePublic_Message => ResourceManager.GetString("ModuleTypeMustBePublic_Message");
     public static string DependencyTypeMustBePublic_Message => ResourceManager.GetString("DependencyTypeMustBePublic_Message");
     public static string DependencyImplementsMultipleLifetimes_Message => ResourceManager.GetString("DependencyImplementsMultipleLifetimes_Message");
+    public static string DependsOnNonAbpModuleType_Message => ResourceManager.GetString("DependsOnNonAbpModuleType_Message");
     public static string AddAbpWidget_Description => ResourceManager.GetString("AddAbpWidget_Description");
   }
 }
