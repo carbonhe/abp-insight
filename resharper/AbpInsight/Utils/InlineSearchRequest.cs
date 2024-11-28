@@ -80,7 +80,7 @@ public class InlineSearchRequest(
                     }
 
                     var popupMenuOptions =
-                        popupMenuBehaviour.GetPopupMenuOptions(iconId, this, occurrences, true);
+                        popupMenuBehaviour.GetPopupMenuOptions(iconId, this, occurrences, false);
                     popupMenu.ShowMenuFromTextControl(ctx, occurrences, popupMenuOptions);
                 });
         }), (Action)(() => { }), true);
