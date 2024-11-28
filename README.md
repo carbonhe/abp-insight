@@ -1,6 +1,7 @@
 ![Version](https://img.shields.io/jetbrains/plugin/v/25879)
 ![Downloads](https://img.shields.io/jetbrains/plugin/d/25879)
 ![Rating](https://img.shields.io/jetbrains/plugin/r/stars/25879)
+![ci](https://github.com/carbonhe/abp-insight/actions/workflows/ci.yml/badge.svg?branch=main)
 
 ***This project is in early stage, only a few features has been implemented. If you have any suggestions, please feel
 free to put forward your ideas or submit PR***
