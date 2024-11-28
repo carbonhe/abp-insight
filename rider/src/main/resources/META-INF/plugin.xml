@@ -4,6 +4,10 @@
     <vendor>Carbon</vendor>
     <depends>com.intellij.modules.rider</depends>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <dependencySupport kind="dotnet" coordinate="Volo.Abp.Core" displayName="Abp Insight"/>
+    </extensions>
+
     <description><![CDATA[
 <p>Adds navigation, auto-completion and inspections specific to the <a href="https://abp.io/">Abp Framework</a>.</p>
 <p>
