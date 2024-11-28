@@ -144,7 +144,7 @@ tasks {
             changeNotes.set(
                 """
         <body>
-        <p><b>New in $version</b></p>
+        <p><b>New in ${project.version}</b></p>
         <p>
         ${changelog.renderItem(item, Changelog.OutputType.HTML)}
         </p>
