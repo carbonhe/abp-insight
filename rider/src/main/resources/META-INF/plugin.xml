@@ -4,8 +4,8 @@
     <vendor>Carbon</vendor>
     <depends>com.intellij.modules.rider</depends>
 
-
     <extensions defaultExtensionNs="com.intellij">
+        <dependencySupport kind="dotnet" coordinate="Volo.Abp.Core" displayName="Abp Insight"/>
         <projectConfigurable parentId="FileTemplatesSettingsId"
                              instance="com.carbon.settings.AbpInsightTemplatesOptionPage"
                              groupWeight="-120" displayName="Abp Insight"/>
@@ -27,8 +27,6 @@
 </ul>
 </p>
 ]]>
-
     </description>
-
 
 </idea-plugin>
