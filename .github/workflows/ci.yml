@@ -1,0 +1,37 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: ci
+
+on:
+  push:
+    branches: [ ]
+
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  backend:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./resharper
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore packages
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal

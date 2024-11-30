@@ -88,4 +88,14 @@
         <Behavour overlapResolvePolicy="NONE"/>
     </Warning>
 
+    <Error name="DependsOnNonAbpModuleType" staticGroup="AbpInsightErrors">
+        <Parameter type="ITypeUsage" name="typeUsage"/>
+        <Parameter type="string" name="actualType"/>
+        <Message resourceName="DependsOnNonAbpModuleType_Message" resourceType="Strings">
+            <Argument>ActualType</Argument>
+        </Message>
+        <Range>TypeUsage.GetDocumentRange()</Range>
+        <Behavour overlapResolvePolicy="ERROR"/>
+    </Error>
+
 </Errors>
