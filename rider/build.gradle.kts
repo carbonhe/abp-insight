@@ -2,21 +2,23 @@ import org.apache.tools.ant.taskdefs.condition.Os
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.ChangelogSectionUrlBuilder
 import org.jetbrains.changelog.date
-import org.jetbrains.intellij.IntelliJPluginConstants
-import org.jetbrains.intellij.tasks.SetupDependenciesTask
 
 plugins {
     id("java")
-    id("com.jetbrains.rdgen")
-    id("org.jetbrains.intellij") version "1.15.0"
     id("org.jetbrains.changelog") version "2.2.1"
-    kotlin("jvm") version "1.9.0"
+    id("org.jetbrains.intellij.platform")
+    kotlin("jvm")
 }
 
 repositories {
-    maven { setUrl("https://cache-redirector.jetbrains.com/intellij-repository/snapshots") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/maven-central") }
-    mavenCentral()
+    maven("https://cache-redirector.jetbrains.com/intellij-dependencies")
+    maven("https://cache-redirector.jetbrains.com/intellij-repository/releases")
+    maven("https://cache-redirector.jetbrains.com/intellij-repository/snapshots")
+    maven("https://cache-redirector.jetbrains.com/maven-central")
+    intellijPlatform {
+        defaultRepositories()
+        jetbrainsRuntime()
+    }
 }
 
 apply {
@@ -27,36 +29,55 @@ val productVersion = extra["productVersion"].toString()
 val buildConfiguration = extra["buildConfiguration"].toString()
 
 
-val rdLibDirectory: () -> File = { file("${tasks.setupDependencies.get().idea.get().classes}/lib/rd") }
-extra["rdLibDirectory"] = rdLibDirectory
+//val rdLibDirectory: () -> File = { file("${tasks.setupDependencies.get().idea.get().classes}/lib/rd") }
+//logger.lifecycle(rdLibDirectory().toString())
+//extra["rdLibDirectory"] = rdLibDirectory
 
 val repoRoot = projectDir.parentFile!!
 val backendRoot = File(repoRoot, "resharper")
 
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+
 sourceSets {
     main {
         java {
-            srcDir("src/rider/main/java")
-        }
-        kotlin {
-            srcDir("src/rider/main/kotlin")
+            srcDir("src/main/gen")
+            srcDir("src/main/rdgen/kotlin")
         }
         resources {
-            srcDir("src/rider/main/resources")
+            srcDir("src/main/rdgen/resources")
         }
     }
 }
 
-
-intellij {
-    type.set("RD")
-    pluginName.set("AbpInsight")
-    version.set(productVersion)
-    intellijRepository.set("https://cache-redirector.jetbrains.com/intellij-repository")
-    // Sources aren't available for Rider
-    downloadSources.set(false)
-    instrumentCode.set(false)
+idea {
+    module {
+        generatedSourceDirs.add(file("src/main/rdgen/kotlin"))
+        resourceDirs.add(file("src/main/rdgen/resources"))
+    }
 }
+
+dependencies {
+    intellijPlatform {
+        rider(productVersion)
+        jetbrainsRuntime()
+        instrumentationTools()
+    }
+}
+
+
+intellijPlatform {
+    pluginConfiguration {
+        name = "AbpInsight"
+    }
+}
+
+
 
 
 fun getDotnetCli(): String {
@@ -99,50 +120,15 @@ tasks {
         maxHeapSize = "1500m"
     }
 
-    rdgen {
-        val modelDir = File(rootDir, "protocol/src/main/kotlin/model")
-        val csOutput = File(rootDir, "src/dotnet/AbpInsight/Protocol")
-        val ktOutput = File(rootDir, "src/rider/main/kotlin/protocol")
-
-        verbose = true
-
-
-        if (!extra.has("riderSdkRoot")) {
-            extra["riderSdkRoot"] = getByName(
-                IntelliJPluginConstants.SETUP_DEPENDENCIES_TASK_NAME, SetupDependenciesTask::class
-            ).idea.get().classes
-        }
-
-        classpath(File(extra["riderSdkRoot"] as File, "lib/rd/rider-model.jar"))
-        sources(modelDir)
-        hashFolder = File(buildDir, "rdgen").absolutePath
-
-        packages = "model.rider"
-
-        generator {
-            language = "kotlin"
-            transform = "asis"
-            root = "com.jetbrains.rider.model.nova.ide.IdeRoot"
-            directory = ktOutput.canonicalPath
-        }
-
-        generator {
-            language = "csharp"
-            transform = "reversed"
-            root = "com.jetbrains.rider.model.nova.ide.IdeRoot"
-            directory = csOutput.canonicalPath
-        }
-
-
-    }
 
     patchPluginXml {
         dependsOn(patchChangelog)
         sinceBuild.set("243")
 
-        changelog.getOrNull(project.version.toString())?.let { item ->
-            changeNotes.set(
-                """
+        doLast {
+            changelog.getOrNull(project.version.toString())?.let { item ->
+                changeNotes.set(
+                    """
         <body>
         <p><b>New in ${project.version}</b></p>
         <p>
@@ -150,7 +136,8 @@ tasks {
         </p>
         <p>See the <a href="https://github.com/carbonhe/abp-insight/blob/main/CHANGELOG.md">CHANGELOG</a> for more details and history.</p>
         </body>""".trimIndent()
-            )
+                )
+            }
         }
 
     }

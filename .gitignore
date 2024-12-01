@@ -11,3 +11,5 @@ riderModule.iml
 *.DotSettings.user
 
 *.generated.dotSettings
+
+.intellijPlatform
