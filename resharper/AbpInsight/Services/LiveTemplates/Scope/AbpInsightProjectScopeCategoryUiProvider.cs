@@ -13,7 +13,7 @@ public class AbpInsightProjectScopeCategoryUiProvider : ScopeCategoryUIProvider
         TemplateImage.Register("AbpInsight", AbpInsightIcons.Logo.Id);
     }
 
-    private const int Priority = -200;
+    private const int Priority = -100;
 
     public AbpInsightProjectScopeCategoryUiProvider() : base(AbpInsightIcons.Logo.Id)
     {
