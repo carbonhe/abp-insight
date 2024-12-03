@@ -11,16 +11,8 @@
                              groupWeight="-120" displayName="Abp Insight"/>
     </extensions>
 
-    <description><![CDATA[
-<p>Adds navigation, auto-completion and inspections specific to the <a href="https://abp.io/">Abp Framework</a>.</p>
-<p>
-<strong>Features</strong>
-<ul>
-  <li>Analyze Abp module dependencies and potential problems.</li>
-  <li>And much more!</li>
-</ul>
-</p>
-]]>
+    <description>
+        <![CDATA[<p>Provides  additional features for <a href="https://abp.io/">Abp Framework</a>.</p>]]>
     </description>
 
 </idea-plugin>
