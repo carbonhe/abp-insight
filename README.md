@@ -24,16 +24,18 @@ Open `Setttings` -> `Plugins`, switch to `Marketplace` tab, search "Abp Insight"
 - Execute `runIde` gradle task in Intellij IDEA, it will start a new Rider instance with the developing plugin installed.
 - Start a debug session by click `Run -> Attach to Process` in Rider, select the corresponding process, then you can debug the source code as normal.
 
-## Implemented features
+## Features
 
-- Search Abp module dependencies.
-- Inspect Abp module naming and quick fix it.(Abp module name should end with 'Module')
+- [ ] Integrate `ApplicationService` with Rider endpoints explorer.
 
-## Expected features
+- ### Navigation
 
-- Inspect `ApplicationService` in IDE's Endpoints tool window.
-- Inspect incorrect dependency injection usage, such as circular dependency, unresolved constructor injection, etc. 
+    - [x] Navigate to Abp module dependencies.
+    - [x] Navigate to service declarations in Abp module.
 
+- ### QuickFix
+    - [x] Incorrect Abp module naming (Abp module name should end with 'Module').
 
-
+- ### Templates
+    - [x] Abp widget class.
 
