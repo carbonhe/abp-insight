@@ -36,6 +36,6 @@ Open `Setttings` -> `Plugins`, switch to `Marketplace` tab, search "Abp Insight"
 - ### QuickFix
     - [x] Incorrect Abp module naming (Abp module name should end with 'Module').
 
-- ### Templates
+- ### Template
     - [x] Abp widget class.
 
