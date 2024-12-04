@@ -80,8 +80,6 @@ tasks {
 
 intellijPlatform {
     pluginConfiguration {
-        name = "AbpInsight"
-
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         description = providers.fileContents(layout.projectDirectory.file("../README.md")).asText.map {
             val startMark = "<!-- plugin description start -->"
@@ -91,12 +89,9 @@ intellijPlatform {
             var catch = false
             var lines = mutableListOf<String>()
             for (line in it.lines()) {
-                if (line.startsWith(endMark))
-                    catch = false
-                if (catch)
-                    lines.add(line)
-                if (line.startsWith(startMark))
-                    catch = true
+                if (line.startsWith(endMark)) catch = false
+                if (catch) lines.add(line)
+                if (line.startsWith(startMark)) catch = true
 
             }
 
@@ -116,7 +111,7 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = project.version.toString().split(".")[0]
-            untilBuild = "*"
+            untilBuild = "999"
         }
 
 
