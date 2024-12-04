@@ -10,6 +10,12 @@
 
 ### Removed
 
+## 243.1.0 (2024-12-04)
+
+### Added
+
+- Integrate `ApplicationService` with endpoints toolwindow.
+
 ## 243.0.9 (2024-11-28)
 
 ### Added

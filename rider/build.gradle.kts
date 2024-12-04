@@ -2,6 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.ChangelogSectionUrlBuilder
 import org.jetbrains.changelog.date
+import org.jetbrains.changelog.markdownToHTML
 
 plugins {
     id("java")
@@ -27,11 +28,6 @@ apply {
 
 val productVersion = extra["productVersion"].toString()
 val buildConfiguration = extra["buildConfiguration"].toString()
-
-
-//val rdLibDirectory: () -> File = { file("${tasks.setupDependencies.get().idea.get().classes}/lib/rd") }
-//logger.lifecycle(rdLibDirectory().toString())
-//extra["rdLibDirectory"] = rdLibDirectory
 
 val repoRoot = projectDir.parentFile!!
 val backendRoot = File(repoRoot, "resharper")
@@ -70,11 +66,67 @@ dependencies {
     }
 }
 
+tasks {
+    changelog {
+        version.set(project.version.toString())
+        path.set("${project.projectDir}/../CHANGELOG.md")
+        header.set(provider { "${version.get()} (${date()})" })
+        unreleasedTerm.set("[Unreleased]")
+        groups.set(listOf("Added", "Fixed", "Changed", "Removed"))
+        sectionUrlBuilder.set(ChangelogSectionUrlBuilder { repositoryUrl, currentVersion, previousVersion, isUnreleased -> "unreleased" })
+    }
+}
+
 
 intellijPlatform {
     pluginConfiguration {
         name = "AbpInsight"
+
+        // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
+        description = providers.fileContents(layout.projectDirectory.file("../README.md")).asText.map {
+            val startMark = "<!-- plugin description start -->"
+            val endMark = "<!-- plugin description end -->"
+
+
+            var catch = false
+            var lines = mutableListOf<String>()
+            for (line in it.lines()) {
+                if (line.startsWith(endMark))
+                    catch = false
+                if (catch)
+                    lines.add(line)
+                if (line.startsWith(startMark))
+                    catch = true
+
+            }
+
+            lines.joinToString("\n").let(::markdownToHTML)
+
+        }
+
+        val changelog = project.changelog // local variable for configuration cache compatibility
+        // Get the latest available change notes from the changelog file
+        changeNotes = with(changelog) {
+            renderItem(
+                (getOrNull(project.version.toString()) ?: getUnreleased()).withHeader(false).withEmptySections(false),
+                Changelog.OutputType.HTML,
+            )
+
+        }
+
+        ideaVersion {
+            sinceBuild = project.version.toString().split(".")[0]
+            untilBuild = "*"
+        }
+
+
     }
+
+    publishing {
+        token = providers.environmentVariable("JB_MARKETPLACE_TOKEN")
+        channels = listOf("Stable")
+    }
+
 }
 
 
@@ -123,32 +175,6 @@ tasks {
 
     patchPluginXml {
         dependsOn(patchChangelog)
-        sinceBuild.set("243")
-
-        doLast {
-            changelog.getOrNull(project.version.toString())?.let { item ->
-                changeNotes.set(
-                    """
-        <body>
-        <p><b>New in ${project.version}</b></p>
-        <p>
-        ${changelog.renderItem(item, Changelog.OutputType.HTML)}
-        </p>
-        <p>See the <a href="https://github.com/carbonhe/abp-insight/blob/main/CHANGELOG.md">CHANGELOG</a> for more details and history.</p>
-        </body>""".trimIndent()
-                )
-            }
-        }
-
-    }
-
-    changelog {
-        version.set(project.version.toString())
-        path.set("${project.projectDir}/../CHANGELOG.md")
-        header.set(provider { "${version.get()} (${date()})" })
-        unreleasedTerm.set("[Unreleased]")
-        groups.set(listOf("Added", "Fixed", "Changed", "Removed"))
-        sectionUrlBuilder.set(ChangelogSectionUrlBuilder { repositoryUrl, currentVersion, previousVersion, isUnreleased -> "unreleased" })
     }
 
 
@@ -226,12 +252,6 @@ tasks {
             }
         }
     }
-
-    publishPlugin {
-        token.set(System.getenv("JB_MARKETPLACE_TOKEN"))
-        channels.set(listOf("Stable"))
-    }
-
 
     register("release") {
         dependsOn(patchChangelog)
