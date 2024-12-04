@@ -12,8 +12,4 @@
 
     </extensions>
 
-    <description>
-        <![CDATA[<p>Provides additional features for <a href="https://abp.io/">Abp Framework</a>.</p>]]>
-    </description>
-
 </idea-plugin>
