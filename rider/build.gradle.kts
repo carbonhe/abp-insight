@@ -111,7 +111,7 @@ intellijPlatform {
 
         ideaVersion {
             sinceBuild = project.version.toString().split(".")[0]
-            untilBuild = "999"
+            untilBuild = "333.*"
         }
 
 
