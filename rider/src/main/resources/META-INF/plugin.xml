@@ -6,13 +6,14 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <dependencySupport kind="dotnet" coordinate="Volo.Abp.Core" displayName="Abp Insight"/>
-        <projectConfigurable parentId="FileTemplatesSettingsId"
-                             instance="com.carbon.settings.AbpInsightTemplatesOptionPage"
-                             groupWeight="-120" displayName="Abp Insight"/>
+
+        <projectConfigurable parentId="FileTemplatesSettingsId" instance="com.carbon.settings.AbpInsightTemplatesOptionPage" groupWeight="-120" displayName="Abp Insight"/>
+        <microservices.endpointsProvider implementation="com.carbon.endpoints.AbpInsightEndpointsProvider"/>
+
     </extensions>
 
     <description>
-        <![CDATA[<p>Provides  additional features for <a href="https://abp.io/">Abp Framework</a>.</p>]]>
+        <![CDATA[<p>Provides additional features for <a href="https://abp.io/">Abp Framework</a>.</p>]]>
     </description>
 
 </idea-plugin>

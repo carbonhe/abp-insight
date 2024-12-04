@@ -24,7 +24,9 @@ public static class KnownTypes
         new ClrTypeName("Volo.Abp.DependencyInjection.DisableConventionalRegistrationAttribute");
 
 
-    // ApplicationService
+    // RemoteService
+    public static readonly IClrTypeName IRemoteService = new ClrTypeName("Volo.Abp.IRemoteService");
+    public static readonly IClrTypeName RemoteServiceAttribute = new ClrTypeName("Volo.Abp.RemoteServiceAttribute");
     public static readonly IClrTypeName IApplicationService = new ClrTypeName("Volo.Abp.Application.Services.IApplicationService");
 
     // Event
