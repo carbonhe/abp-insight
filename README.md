@@ -32,7 +32,7 @@ Open `Setttings` -> `Plugins`, switch to `Marketplace` tab, search "Abp Insight"
 
 ## Features
 
-- [ ] Integrate `ApplicationService` with Rider endpoints explorer.
+- [ ] Integrate `ApplicationService` with Rider endpoints explorer.(initial implementation available)
 
 - ### Navigation
 

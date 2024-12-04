@@ -10,6 +10,12 @@
 
 ### Removed
 
+## 243.1.1 (2024-12-04)
+
+### Fixed
+
+- Fix the same incorrect endpoints appears in different projects.
+
 ## 243.1.0 (2024-12-04)
 
 ### Added

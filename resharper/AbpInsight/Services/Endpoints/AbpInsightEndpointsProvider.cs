@@ -20,7 +20,6 @@ using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvid
 using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
-using JetBrains.ReSharper.Psi.Search;
 using JetBrains.Util.DataFlow;
 using JetBrains.Util.Logging;
 
@@ -139,14 +138,11 @@ public class AbpInsightEndpointsProvider : SourceAndModulesChangeConsumer, IHttp
 
             if (typeElement != null)
             {
-                var classes = new List<IClass>();
-
-                psiModule.GetPsiServices().ParallelFinder.FindInheritors(
-                    typeElement!,
-                    classes.ConsumeDeclaredElements(),
-                    NullProgressIndicator.Create());
                 var moduleRepository = GetOrCreateEndpointsPerModuleRepository(psiModule);
-                foreach (var clazz in classes)
+
+                foreach (var clazz in psiModule.GetPsiServices().Symbols
+                             .GetSymbolScope(psiModule, false, true).GetAllTypeElementsGroupedByName()
+                             .Where(it => it.IsDescendantOf(typeElement)).OfType<IClass>())
                 {
                     foreach (var endpoint in ConventionalControllerUtil.GetControllerEndpoints(clazz, psiModule))
                     {
