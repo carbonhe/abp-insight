@@ -17,6 +17,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Update;
 using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider;
 using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.AspNetHttpEndpoints;
+using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.AspNetHttpEndpoints.AttributeRouting;
 using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.Util;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
@@ -46,6 +47,7 @@ public class AbpInsightEndpointsProvider : SourceAndModulesChangeConsumer, IHttp
         SolutionDocumentChangeProvider solutionDocumentChangeProvider,
         SuspendHardOperationsManager suspendHardOperationsManager,
         EndpointsSolutionLoadBarrier endpointsSolutionLoadBarrier,
+        SourceRoutingAttributesProvider sourceRoutingAttributesProvider,
         IShellLocks shellLocks) : base(psiServices, changeManager, solutionDocumentChangeProvider, psiModules, shellLocks, CSharpProjectFileType.Instance)
     {
         _lifetime = lifetime;
@@ -57,9 +59,11 @@ public class AbpInsightEndpointsProvider : SourceAndModulesChangeConsumer, IHttp
         _asyncItemsProcessor = AsyncItemsProcessorUtil.CreateWithProcessingOnCommittedPsi<IInvalidationScope>(
                 GetType().Name, lifetime, logger, psiServices, asyncCommitService, synchronizationPoints, ProcessScope, InvalidateScope)
             .PauseWhenCachesAreNotReady(lifetime, psiServices)
+            .PauseWhenNotUpToDate(lifetime, sourceRoutingAttributesProvider)
             .PauseOnSuspendHardOperations(suspendHardOperationsManager)
             .PauseUntilSolutionLoaded(lifetime, endpointsSolutionLoadBarrier);
         IsUpToDate = new Reasons<string>("AbpInsightEndpointsProvider::IsUpToDate", logger)
+            .AddWhenNotUpToDate(lifetime, sourceRoutingAttributesProvider)
             .AddWhenFalse(untilSolutionCloseLifetime, _asyncItemsProcessor.ItemsToProcess.IsEmptyNotificationMode,
                 () => $"OwnProcessor::IsUpToDate::{Guid.NewGuid()}").AreEmpty;
 

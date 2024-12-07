@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using AbpInsight.Utils;
-using AbpInsight.VoloAbp.DependencyInjection;
 using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.AspNetHttpEndpoints;
+using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.AspNetHttpEndpoints.AttributeRouting;
 using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.AspNetHttpEndpoints.RouteSources;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
@@ -79,32 +79,57 @@ public static class ConventionalControllerUtil
         if (clazz.IsValid() && method.GetAccessRights() == AccessRights.PUBLIC && method is { IsAbstract: false, IsStatic: false })
         {
             var routeSubstitutions = RouteValuesUtil.GetAvailableRouteValues(psiModule, clazz, method).CreateAllPossibleSubstitutionDatum().ToArray();
-            var httpVerb = HttpVerb.Exact(GetConventionalVerbForMethodName(method.ShortName));
-            var template = $"api/app/{clazz.ShortName.RemovePostfix(CommonPostfixes)}";
-            if (method.Parameters.Any(it => it.ShortName == "id" && it.Type.IsSimplePredefined()))
+
+
+            var routingAttributesProvider = RoutingAttributesProvider.GetInstance(psiModule);
+
+            var routingAttributes = routingAttributesProvider.GetRoutingAttributes(method);
+
+            if (routingAttributes.Any())
             {
-                template += "/{id}";
+                foreach (var routingAttribute in routingAttributes)
+                {
+                    foreach (var verb in routingAttribute.Verbs)
+                    {
+                        yield return new AspNetHttpEndpoint(psiModule, clazz, method, verb,
+                            [new RouteTemplateProvider(routingAttribute.Template, psiModule)], routeSubstitutions[0]);
+                    }
+                }
             }
-
-            var actionName = method.ShortName;
-
-            if (ConventionalPrefixes.TryGetValue(httpVerb.ToString(), out var prefixes))
+            else
             {
-                actionName = actionName.RemovePrefix(prefixes).RemovePostfix("Async");
+                var template = $"api/app/{clazz.ShortName.RemovePostfix(CommonPostfixes).ToKebabCase()}";
+
+
+                if (method.Parameters.Any(it => it.ShortName == "id" && it.Type.IsSimplePredefined()))
+                {
+                    template += "/{id}";
+                }
+
+                var httpVerb = HttpVerb.Exact(GetConventionalVerbForMethodName(method.ShortName));
+
+
+                var actionName = method.ShortName;
+
+                if (ConventionalPrefixes.TryGetValue(httpVerb.ToString(), out var prefixes))
+                {
+                    actionName = actionName.RemovePrefix(prefixes).RemovePostfix("Async").ToKebabCase();
+                }
+
+                template += $"/{actionName}";
+
+                var templateProvider = new RouteTemplateProvider(template, psiModule);
+
+                yield return new AspNetHttpEndpoint(psiModule, clazz, method, httpVerb, [templateProvider], routeSubstitutions[0]);
             }
-
-            template += $"/{actionName}";
-
-            var templateProvider = new RouteTemplateProvider(template, psiModule);
-
-            yield return new AspNetHttpEndpoint(psiModule, clazz, method, httpVerb, [templateProvider], routeSubstitutions[0]);
         }
     }
 
 
-    private class RouteTemplateProvider(string template, IPsiModule psiModule) : IRouteTemplateProvider
+    private class RouteTemplateProvider(string? template, IPsiModule psiModule) : IRouteTemplateProvider
     {
-        public string Template { get; } = template;
+        public string? Template { get; } = template;
+
         public IPsiModule PsiModule { get; } = psiModule;
 
         public RouteTemplateSource TemplateSource => RouteTemplateSource.RoutingConvention;
