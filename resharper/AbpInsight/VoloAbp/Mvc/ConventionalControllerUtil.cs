@@ -7,6 +7,7 @@ using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvid
 using JetBrains.ReSharper.Feature.Services.Web.AspRouteTemplates.EndpointsProvider.AspNetHttpEndpoints.RouteSources;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Modules;
+using JetBrains.Util;
 
 namespace AbpInsight.VoloAbp.Mvc;
 
@@ -57,7 +58,7 @@ public static class ConventionalControllerUtil
         if (clazz.GetAccessRights() != AccessRights.PUBLIC || clazz.IsAbstract || clazz.HasTypeParameters())
             return false;
 
-        return clazz.DerivesFrom(KnownTypes.IRemoteService);
+        return clazz.DerivesFrom(KnownTypes.IRemoteService) && !clazz.DerivesFrom(KnownTypes.ControllerBase);
     }
 
     private static IEnumerable<IMethod> GetControllerActions(IClass clazz, IPsiModule psiModule)
