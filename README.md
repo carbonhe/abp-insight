@@ -32,17 +32,10 @@ Open `Setttings` -> `Plugins`, switch to `Marketplace` tab, search "Abp Insight"
 
 ## Features
 
-- [ ] Integrate `ApplicationService` with Rider endpoints explorer.(initial implementation available)
-
-- ### Navigation
-
-    - [x] Navigate to Abp module dependencies.
-    - [x] Navigate to service declarations in Abp module.
-
-- ### QuickFix
-    - [x] Incorrect Abp module naming (Abp module name should end with 'Module').
-
-- ### Template
-    - [x] Abp widget class.
+- [x] Integrate `ApplicationService` with Rider endpoints explorer.
+- [x] Navigate to Abp module dependencies.
+- [x] Navigate to service declarations in Abp module.
+- [x] Incorrect Abp module naming quick fix.(Abp module name should end with 'Module')
+- [x] Abp widget class.
 
 <!-- plugin description end -->

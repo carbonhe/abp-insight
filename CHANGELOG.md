@@ -10,6 +10,12 @@
 
 ### Removed
 
+## 243.1.2 (2024-12-07)
+
+### Fixed
+
+- Respecting http verb attributes when building conventional controller endpoints.
+
 ## 243.1.1 (2024-12-04)
 
 ### Fixed
