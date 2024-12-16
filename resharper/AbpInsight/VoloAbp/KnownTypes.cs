@@ -32,6 +32,7 @@ public static class KnownTypes
 
     // Event
     public static readonly IClrTypeName IEventHandler = new ClrTypeName("Volo.Abp.EventBus.IEventHandler");
+    public static readonly IClrTypeName IEventBus = new ClrTypeName("Volo.Abp.EventBus.IEventBus");
 
     // DomainService
     public static readonly IClrTypeName IDomainService = new ClrTypeName("Volo.Abp.Domain.Services.IDomainService");

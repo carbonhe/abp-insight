@@ -32,6 +32,7 @@ public class TestAbpInsightAttribute(Version version)
     private static IEnumerable<string> GetPackageNames()
     {
         yield return "Volo.Abp.Core";
+        yield return "Volo.Abp.EventBus.Abstractions";
     }
 
     public bool Inherits => false;
