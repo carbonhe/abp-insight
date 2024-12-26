@@ -10,6 +10,12 @@
 
 ### Removed
 
+## 243.1.3 (2024-12-26)
+
+### Added
+
+- Navigate to Abp event handler declaration from `PlublishAsync()`. (currently only supports `ILocalEventBus`)
+
 ## 243.1.2 (2024-12-07)
 
 ### Fixed
