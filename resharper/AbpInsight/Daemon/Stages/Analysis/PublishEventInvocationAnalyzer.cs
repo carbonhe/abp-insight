@@ -1,7 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AbpInsight.Services.InlayHints;
+using AbpInsight.Utils;
 using AbpInsight.VoloAbp;
+using JetBrains.Application.Progress;
+using JetBrains.Application.Settings;
 using JetBrains.ReSharper.Feature.Services.Daemon;
+using JetBrains.ReSharper.Feature.Services.InlayHints;
+using JetBrains.ReSharper.Feature.Services.Navigation.Requests;
+using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
@@ -15,9 +22,9 @@ namespace AbpInsight.Daemon.Stages.Analysis;
     [
         typeof(AbpInsightInlayHighlighting)
     ])]
-public class PublishEventInvocationAnalyzer : AbpInsightProblemAnalyzer<IInvocationExpression>
+public class PublishEventInvocationAnalyzer(ISettingsStore settingsStore) : AbpInsightProblemAnalyzer<IInvocationExpression>
 {
-    public const string MethodName = "PublishAsync";
+    private const string MethodName = "PublishAsync";
 
     protected override void Analyze(IInvocationExpression element, ElementProblemAnalyzerData data, IHighlightingConsumer consumer)
     {
@@ -37,6 +44,52 @@ public class PublishEventInvocationAnalyzer : AbpInsightProblemAnalyzer<IInvocat
             !Equals(method.ContainingType, typeElement))
             return;
 
-        consumer.AddHighlighting(new AbpInsightInlayHighlighting(element, element.LPar.GetDocumentEndOffset(), null, null, "Abp event dispatch"));
+        consumer.AddHighlighting(
+            new AbpInsightInlayHighlighting(element, element.LPar.GetDocumentEndOffset(), "Abp event dispatch",
+                source => new InlineSearchRequest(
+                    "Abp event handlers",
+                    element.GetSolution(),
+                    new[] { method },
+                    pi => SearchEventHandlers(method, element, pi)).ShowOccurrences(element.LPar.GetDocumentRange(), "No related event handlers"),
+                [
+                    IntraTextAdornmentDataModelHelper.CreateTurnOffAllInlayHintsBulbMenuItem(settingsStore)
+                ]));
+    }
+
+
+    private static ICollection<IOccurrence> SearchEventHandlers(IMethod method, IInvocationExpression element, IProgressIndicator pi)
+    {
+        if (method.Parameters.Count == 2)
+        {
+            var baseType = TypeFactory.CreateTypeByCLRName(KnownTypes.ILocalEventHandler, element.PsiModule).GetTypeElement()!;
+            var tp = baseType.TypeParameters[0];
+            var eventDataType = element.Arguments[0].Value?.Type();
+
+
+            if (eventDataType != null)
+            {
+                var substitution = EmptySubstitution.INSTANCE.Extend(tp, eventDataType);
+
+                var consumer = new FilterBySubstitutionSearchResultsConsumer(
+                    [new DeclaredElementInstance(baseType, substitution)], new SearchResultsConsumer(), true);
+
+                method.GetPsiServices().ParallelFinder.FindInheritors(baseType, consumer, pi);
+
+                var occurrences = consumer.GetOccurrences()
+                    .Where(it =>
+                    {
+                        if (it is DeclaredElementOccurrence o && o.GetDeclaredElement() is IClass clazz)
+                        {
+                            return !clazz.HasTypeParameters() && !clazz.IsAbstract;
+                        }
+
+                        return false;
+                    }).ToList();
+
+                return occurrences;
+            }
+        }
+
+        return new List<IOccurrence>();
     }
 }

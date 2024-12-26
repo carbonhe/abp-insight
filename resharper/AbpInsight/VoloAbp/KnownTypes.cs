@@ -31,7 +31,7 @@ public static class KnownTypes
     public static readonly IClrTypeName ControllerBase = new ClrTypeName("Microsoft.AspNetCore.Mvc.ControllerBase");
 
     // Event
-    public static readonly IClrTypeName IEventHandler = new ClrTypeName("Volo.Abp.EventBus.IEventHandler");
+    public static readonly IClrTypeName ILocalEventHandler = new ClrTypeName("Volo.Abp.EventBus.ILocalEventHandler`1");
     public static readonly IClrTypeName IEventBus = new ClrTypeName("Volo.Abp.EventBus.IEventBus");
 
     // DomainService

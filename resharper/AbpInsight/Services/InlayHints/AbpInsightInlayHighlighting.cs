@@ -1,4 +1,8 @@
-﻿using AbpInsight.Daemon.Stages.Highlightings;
+﻿using System;
+using System.Collections.Generic;
+using AbpInsight.Daemon.Stages.Highlightings;
+using JetBrains.Application.UI.Controls.BulbMenu.Items;
+using JetBrains.Application.UI.PopupLayout;
 using JetBrains.DocumentModel;
 using JetBrains.ReSharper.Daemon;
 using JetBrains.ReSharper.Feature.Services.Daemon;
@@ -16,9 +20,11 @@ namespace AbpInsight.Services.InlayHints;
 public class AbpInsightInlayHighlighting(
     ITreeNode node,
     DocumentOffset offset,
-    string? toolTip,
-    string? errorStripeToolTip,
-    RichText? description) : IAbpInsightHighlighting, IInlayHintWithDescriptionHighlighting
+    RichText? description,
+    Action<PopupWindowContextSource>? navigate,
+    IEnumerable<BulbMenuItem>? bulbItems = null,
+    string? toolTip = null,
+    string? errorStripeToolTip = null) : IAbpInsightHighlighting, IInlayHintWithDescriptionHighlighting
 {
     public const string AttributeId = "AbpInsightInlayHighlighting";
 
@@ -27,6 +33,10 @@ public class AbpInsightInlayHighlighting(
     public string? ErrorStripeToolTip { get; } = errorStripeToolTip;
 
     public RichText? Description { get; } = description;
+
+    public IEnumerable<BulbMenuItem> BulbItems { get; } = bulbItems ?? Array.Empty<BulbMenuItem>();
+
+    public Action<PopupWindowContextSource>? Navigate { get; } = navigate;
 
     public bool IsValid()
     {

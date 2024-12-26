@@ -18,7 +18,6 @@ using JetBrains.ReSharper.Feature.Services.Navigation.Requests;
 using JetBrains.ReSharper.Feature.Services.Occurrences;
 using JetBrains.ReSharper.Feature.Services.Tree;
 using JetBrains.ReSharper.Feature.Services.Tree.SectionsManagement;
-using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Files;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.TextControl.Coords;
@@ -43,7 +42,8 @@ public class InlineSearchRequest(
 
     public SearchDescriptor CreateSearchDescriptor(ICollection<IOccurrence>? occurrences = null) => new InlineSearchDescriptor(this, occurrences);
 
-    public void ShowOccurrences(DocumentRange range, string emptyTooltip, IconId? iconId = null)
+
+    public void ShowOccurrences(PopupWindowContextSource source, PopupWindowContextSource emptyTooltipSource, string emptyTooltip, IconId? iconId = null)
     {
         var requirementsManager = Shell.Instance.GetComponent<RequirementsManager>();
         var dataContexts = Shell.Instance.GetComponent<DataContexts>();
@@ -54,36 +54,39 @@ public class InlineSearchRequest(
         var instance = CommitAllDocumentsRequirement.TryGetInstance(onActiveControl1);
         requirementsManager.ExecuteActionAsync(instance, (Action)(() =>
         {
-            using (CompilationContextCookie.GetOrCreate(range.Document.GetContext(solution)))
-                Lifetime.Using(lifetime =>
+            Lifetime.Using(lifetime =>
+            {
+                var dataRules = DataRules.AddRule<PopupWindowContextSource>("WindowSource", UIDataConstants.PopupWindowContextSource, source);
+                var ctx = dataContexts.CreateOnActiveControl(lifetime, dataRules);
+                if (textControlPos == null ||
+                    !textControlPos.Equals(ctx.GetData<ITextControlPos>(TextControlDataConstants.TextControlPosition)))
+                    return;
+
+                var popupMenu = solution.GetComponent<OccurrencePopupMenu>();
+                var occurrences = Search();
+                if (occurrences == null || occurrences.Count == 0)
                 {
-                    var dataRules = DataRules.AddRule<PopupWindowContextSource>("GutterMarkWindowSource",
-                        UIDataConstants.PopupWindowContextSource,
-                        new PopupWindowContextSource(_ => new RiderEditorOffsetPopupWindowContext(range.StartOffset.Offset)));
-                    var ctx = dataContexts.CreateOnActiveControl(lifetime, dataRules);
-                    if (textControlPos == null ||
-                        !textControlPos.Equals(ctx.GetData<ITextControlPos>(TextControlDataConstants.TextControlPosition)))
-                        return;
+                    var tooltipManager = Shell.Instance.GetComponent<ITooltipManager>();
+                    Lifetime.Define(Lifetime.Eternal,
+                        "Tooltip",
+                        def => tooltipManager.Show(def, WindowlessControlAutomation.Create(emptyTooltip), emptyTooltipSource.Create(def.Lifetime), null,
+                            null));
+                    return;
+                }
 
-                    var popupMenu = solution.GetComponent<OccurrencePopupMenu>();
-                    var occurrences = Search();
-                    if (occurrences == null || occurrences.Count == 0)
-                    {
-                        var tooltipManager = Shell.Instance.GetComponent<ITooltipManager>();
-                        var source = new PopupWindowContextSource(lt =>
-                            new RiderEditorOffsetPopupWindowContext((range.StartOffset.Offset + range.EndOffset.Offset) / 2));
-                        Lifetime.Define(Lifetime.Eternal,
-                            "Tooltip",
-                            def => tooltipManager.Show(def, WindowlessControlAutomation.Create(emptyTooltip), source.Create(def.Lifetime), null,
-                                null));
-                        return;
-                    }
-
-                    var popupMenuOptions =
-                        popupMenuBehaviour.GetPopupMenuOptions(iconId, this, occurrences, false);
-                    popupMenu.ShowMenuFromTextControl(ctx, occurrences, popupMenuOptions);
-                });
+                var popupMenuOptions =
+                    popupMenuBehaviour.GetPopupMenuOptions(iconId, this, occurrences, false);
+                popupMenu.ShowMenuFromTextControl(ctx, occurrences, popupMenuOptions);
+            });
         }), (Action)(() => { }), true);
+    }
+
+    public void ShowOccurrences(DocumentRange range, string emptyTooltip, IconId? iconId = null)
+    {
+        var source = new PopupWindowContextSource(_ => new RiderEditorOffsetPopupWindowContext(range.StartOffset.Offset));
+        var emptyTooltipSource = new PopupWindowContextSource(lt =>
+            new RiderEditorOffsetPopupWindowContext((range.StartOffset.Offset + range.EndOffset.Offset) / 2));
+        ShowOccurrences(source, emptyTooltipSource, emptyTooltip, iconId);
     }
 }
 

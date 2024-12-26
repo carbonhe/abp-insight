@@ -19,8 +19,8 @@ public class AbpInsightAdornmentProvider : IHighlighterAdornmentProvider
     {
         if (highlighter.GetHighlighting() is AbpInsightInlayHighlighting highlighting && highlighting.IsValid())
         {
-            var data = new AdornmentData().WithText(highlighting.ToolTip).WithIcon(AbpInsightIcons.Logo.Id).WithMode(PushToHintMode.Always);
-            return new AdornmentDataModel(data);
+            var data = new AdornmentData().WithText(highlighting.ToolTip).WithIcon(AbpInsightIcons.Logo.Id).WithFlags(AdornmentFlags.IsNavigable).WithMode(PushToHintMode.Always);
+            return new AdornmentDataModel(data, executeNavigation: highlighting.Navigate, contextMenuItems: highlighting.BulbItems);
         }
 
         return null;
