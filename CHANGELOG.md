@@ -8,9 +8,13 @@
 
 ### Changed
 
-- Add underscore effect to Abp event publishing invocation.
-
 ### Removed
+
+## 243.3.4 (2025-01-08)
+
+### Changed
+
+- Add underscore effect to Abp event publishing invocation.
 
 ## 243.1.3 (2024-12-26)
 
