@@ -7,7 +7,7 @@ namespace AbpInsight.Daemon.Stages.Highlightings;
 [StaticSeverityHighlighting(
     Severity.INFO,
     typeof(HighlightingGroupIds.IdentifierHighlightings),
-    AttributeId = AbpInsightHighlightingAttributeIds.AbpInsightImplicitlyUsedIdentifier,
+    AttributeId = AbpInsightHighlightingAttributeIds.ABPINSIGHT_IMPLICITLY_USED_IDENTIFIER,
     Languages = CSharpLanguage.Name,
     OverlapResolve = OverlapResolveKind.NONE)]
 public class AbpInsightImplicitlyUsedIdentifierHighlighting(DocumentRange documentRange) : IHighlighting, IAbpInsightIndicatorHighlighting

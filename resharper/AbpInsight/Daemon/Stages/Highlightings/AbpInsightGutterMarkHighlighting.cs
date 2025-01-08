@@ -15,7 +15,7 @@ public class AbpInsightGutterMarkHighlighting(IClassDeclaration classDeclaration
 {
     public string ToolTip => tooltip;
     public string ErrorStripeToolTip => ToolTip;
-    public string AttributeId => AbpInsightHighlightingAttributeIds.AbpInsightGutterIcon;
+    public string AttributeId => AbpInsightHighlightingAttributeIds.ABPINSIGHT_GUTTER_ICON;
 
     public IEnumerable<BulbMenuItem>? MenuItems => menuItems;
 

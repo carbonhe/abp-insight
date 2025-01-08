@@ -48,7 +48,7 @@ public static class StringExtensions
             throw new ArgumentException("len argument can not be bigger than given string's length!");
         }
 
-        return str[..len];
+        return str.Substring(0, len);
     }
 
     [ContractAnnotation("null <= str:null")]

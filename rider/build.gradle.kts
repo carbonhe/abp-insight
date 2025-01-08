@@ -63,6 +63,8 @@ dependencies {
         rider(productVersion)
         jetbrainsRuntime()
         instrumentationTools()
+        pluginVerifier()
+        zipSigner()
     }
 }
 
@@ -110,8 +112,8 @@ intellijPlatform {
         }
 
         ideaVersion {
-            sinceBuild = project.version.toString().split(".")[0]
-            untilBuild = "333.*"
+            sinceBuild = "243.3.3"
+            untilBuild = "243.*"
         }
 
 
@@ -120,6 +122,12 @@ intellijPlatform {
     publishing {
         token = providers.environmentVariable("JB_MARKETPLACE_TOKEN")
         channels = listOf("Stable")
+    }
+
+    pluginVerification {
+        ides {
+            recommended()
+        }
     }
 
 }

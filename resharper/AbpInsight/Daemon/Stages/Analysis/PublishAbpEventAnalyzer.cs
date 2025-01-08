@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AbpInsight.Daemon.Errors;
 using AbpInsight.Services.InlayHints;
 using AbpInsight.Utils;
 using AbpInsight.VoloAbp;
@@ -20,9 +21,9 @@ namespace AbpInsight.Daemon.Stages.Analysis;
     typeof(IInvocationExpression),
     HighlightingTypes =
     [
-        typeof(AbpInsightInlayHighlighting)
+        typeof(PublishAbpEventWarning)
     ])]
-public class PublishEventInvocationAnalyzer(ISettingsStore settingsStore) : AbpInsightProblemAnalyzer<IInvocationExpression>
+public class PublishAbpEventAnalyzer(ISettingsStore settingsStore) : AbpInsightProblemAnalyzer<IInvocationExpression>
 {
     private const string MethodName = "PublishAsync";
 
@@ -43,6 +44,10 @@ public class PublishEventInvocationAnalyzer(ISettingsStore settingsStore) : AbpI
             || method.Parameters.Count == 0 ||
             !Equals(method.ContainingType, typeElement))
             return;
+        consumer.AddHighlighting(new PublishAbpEventWarning(element, (element.InvokedExpression as IReferenceExpression)?.Reference, "LocalEventBus"));
+
+
+        return;
 
         consumer.AddHighlighting(
             new AbpInsightInlayHighlighting(element, element.LPar.GetDocumentEndOffset(), "Abp event dispatch",

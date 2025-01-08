@@ -12,8 +12,7 @@ pluginManagement {
     }
     plugins {
         id("com.jetbrains.rdgen") version rdVersion
-        // I don't know why this plugin's version influence the rider() in intellijPlatform dependencies
-        id("org.jetbrains.intellij.platform") version "2.0.0-beta8"
+        id("org.jetbrains.intellij.platform") version "2.2.1"
         kotlin("jvm") version "1.9.23"
 
     }

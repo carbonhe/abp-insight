@@ -1,7 +1,7 @@
 ﻿<Project>
 
     <PropertyGroup>
-        <SdkVersion>2024.3</SdkVersion>
+        <SdkVersion>2024.3.3</SdkVersion>
         <Title>Abp Insight</Title>
         <Authors>Carbon</Authors>
     </PropertyGroup>

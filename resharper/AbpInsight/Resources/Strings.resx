@@ -39,4 +39,7 @@
     <data name="DependsOnNonAbpModuleType_Message" xml:space="preserve">
         <value>'{0}' is not an Abp module</value>
     </data>
+    <data name="PublishAbpEvent_Message" xml:space="preserve">
+        <value>Publish Abp event via {0}</value>
+    </data>
 </root>

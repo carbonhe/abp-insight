@@ -1,0 +1,12 @@
+﻿using Volo.Abp.EventBus;
+
+public class Test
+{
+    public void Test()
+    {
+        IEventBus eb = null;
+        eb.|PublishAsync|(0)(new Test());
+    }
+}
+---------------------------------------------------------
+(0): ReSharper AbpInsight Publish Abp Event: Publish Abp event via 'LocalEventBus'

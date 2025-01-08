@@ -132,11 +132,11 @@ public static class ConventionalDependencyScanner
                     if (interfaceType.HasTypeParameters())
                     {
                         var i = interfaceName.IndexOf("`", StringComparison.Ordinal);
-                        interfaceName = interfaceName[..i];
+                        interfaceName = interfaceName.Substring(0, i);
                     }
 
                     if (interfaceName.StartsWith("I", StringComparison.Ordinal))
-                        interfaceName = interfaceName[1..];
+                        interfaceName = interfaceName.Substring(1);
 
                     if (clazz.ShortName.EndsWith(interfaceName, StringComparison.OrdinalIgnoreCase))
                         yield return interfaceType;

@@ -2,7 +2,7 @@
 
 namespace AbpInsight.Services.Actions;
 
-// [ContextActionGroup(Id = GroupId, Name = "Abp")]
+// [ContextActionGroup(Id = GROUP_ID, Name = "Abp")]
 public static class AbpContextActions
 {
     public const string GroupId = "Abp";

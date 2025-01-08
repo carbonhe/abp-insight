@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Add underscore effect to Abp event publishing invocation.
+
 ### Removed
 
 ## 243.1.3 (2024-12-26)

@@ -47,6 +47,10 @@
                 <Title resourceName="DependencyImplementsMultipleLifetimes_Message" resourceType="Strings"/>
                 <Description resourceName="DependencyImplementsMultipleLifetimes_Message" resourceType="Strings"/>
             </Tag>
+            <Tag externalName="PublishAbpEventWarning.HIGHLIGHTING_ID" default="HINT">
+                <Title resourceName="PublishAbpEvent_Message" resourceType="Strings"/>
+                <Description resourceName="PublishAbpEvent_Message" resourceType="Strings"/>
+            </Tag>
         </Group>
     </SeverityConfiguration>
 
@@ -97,5 +101,16 @@
         <Range>TypeUsage.GetDocumentRange()</Range>
         <Behavour overlapResolvePolicy="ERROR"/>
     </Error>
+
+    <Warning name="PublishAbpEvent" configurableSeverity="AbpInsight.PublishAbpEvent">
+        <Parameter type="IInvocationExpression" name="invocationExpression" isValid="skip"/>
+        <Parameter type="IReference" name="reference"/>
+        <Parameter type="string" name="eventBusType"/>
+        <Message resourceName="PublishAbpEvent_Message" resourceType="Strings">
+            <Argument>EventBusType</Argument>
+        </Message>
+        <Range>Reference.GetDocumentRange()</Range>
+        <Behavour overlapResolvePolicy="NONE" qualifiedAttributeID="AbpInsightHighlightingAttributeIds.ABPINSIGHT_PUBLISH_EVENT"/>
+    </Warning>
 
 </Errors>
